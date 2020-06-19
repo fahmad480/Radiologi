@@ -3,21 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package radiologi;
+package testing2;
 
 /**
  *
- * @author 48faraaz
+ * @author IdeaPad
  */
-public class Radiologi {
+public class testingg2 {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println("Hello World!");
-        System.out.println("Hello World2!");
+        System.out.println("Testing");
     }
     
 }

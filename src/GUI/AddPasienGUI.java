@@ -33,7 +33,7 @@ public class AddPasienGUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         edtNamaPasien = new javax.swing.JTextField();
-        edtTTLPasien = new javax.swing.JTextField();
+        edtTPasien = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         edtAlamatPasien = new javax.swing.JTextArea();
         edtHpPasien = new javax.swing.JTextField();
@@ -41,6 +41,7 @@ public class AddPasienGUI extends javax.swing.JFrame {
         btnTambah = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        edtTLPasien = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,7 +57,7 @@ public class AddPasienGUI extends javax.swing.JFrame {
 
         edtNamaPasien.setName("EdtNama"); // NOI18N
 
-        edtTTLPasien.setName("EdtTTL"); // NOI18N
+        edtTPasien.setName("EdtTTL"); // NOI18N
 
         edtAlamatPasien.setColumns(20);
         edtAlamatPasien.setRows(5);
@@ -98,10 +99,13 @@ public class AddPasienGUI extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(edtNamaPasien)
-                            .addComponent(edtTTLPasien, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                             .addComponent(edtHpPasien)
-                            .addComponent(edtKtpPasien))))
+                            .addComponent(edtKtpPasien)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(edtTPasien)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(edtTLPasien, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(151, 151, 151)
@@ -118,9 +122,11 @@ public class AddPasienGUI extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(edtNamaPasien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(edtTTLPasien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(edtTPasien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edtTLPasien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -186,7 +192,8 @@ public class AddPasienGUI extends javax.swing.JFrame {
     private javax.swing.JTextField edtHpPasien;
     private javax.swing.JTextField edtKtpPasien;
     private javax.swing.JTextField edtNamaPasien;
-    private javax.swing.JTextField edtTTLPasien;
+    private com.toedter.calendar.JDateChooser edtTLPasien;
+    private javax.swing.JTextField edtTPasien;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

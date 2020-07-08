@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class ConnectionManager {
    private Connection conn;
    private String driver = "com.sql.jdbc.Driver2";
-   private String url = "jdbc:mysql://localhost:3306/crudoop";
+   private String url = "jdbc:mysql://localhost:3306/radiologi";
    private String Username = "root";
    private String Password = "";
       

@@ -43,10 +43,14 @@
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="edtNamaPasien" max="32767" attributes="0"/>
-                          <Component id="edtTTLPasien" pref="294" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="294" max="32767" attributes="0"/>
                           <Component id="edtHpPasien" alignment="0" max="32767" attributes="0"/>
                           <Component id="edtKtpPasien" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="edtTPasien" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="edtTLPasien" min="-2" pref="135" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -70,9 +74,12 @@
                   <Component id="edtNamaPasien" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="edtTTLPasien" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="edtTPasien" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="edtTLPasien" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -130,7 +137,7 @@
         <Property name="name" type="java.lang.String" value="EdtNama" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="edtTTLPasien">
+    <Component class="javax.swing.JTextField" name="edtTPasien">
       <Properties>
         <Property name="name" type="java.lang.String" value="EdtTTL" noResource="true"/>
       </Properties>
@@ -180,6 +187,8 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Tambah Pasien Baru"/>
       </Properties>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="edtTLPasien">
     </Component>
   </SubComponents>
 </Form>

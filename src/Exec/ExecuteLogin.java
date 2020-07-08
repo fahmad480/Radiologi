@@ -26,7 +26,7 @@ public class ExecuteLogin {
         } else if(roles == "staff") {
             query = "SELECT * FROM staff WHERE ktp='"+ktp+"' AND password='"+password+"'";
         } else {
-            query = "SELECT * FROM supplier WHERE id='"+ktp+"' AND password='"+password+"'";
+            query = "SELECT * FROM supplier WHERE ktp='"+ktp+"' AND password='"+password+"'";
         }
         ConnectionManager conMan = new ConnectionManager();
         Connection conn = conMan.LogOn();

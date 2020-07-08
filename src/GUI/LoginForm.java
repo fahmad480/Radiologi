@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 public class LoginForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form LoginForm
+     * Creates new form LoginForm^
      */
     public LoginForm() {
         initComponents();
@@ -146,13 +146,17 @@ public class LoginForm extends javax.swing.JFrame {
         if(hasil == 1) {
             this.setVisible(false);
             if(role == "dokter") {
-                //form main
+                this.setVisible(false);
+                new MainGUI("dokter").setVisible(true);
             } else if(role == "staff") {
-                //from maintenance, report log, inventory
+                this.setVisible(false);
+                new MainGUI("staff").setVisible(true);
             } else if(role == "suster") {
-                //form tambah pasien
+                this.setVisible(false);
+                new MainGUI("suster").setVisible(true);
             } else {
-                // form inventory
+                this.setVisible(false);
+                new MainGUI("supplier").setVisible(true);
             }
         } else {
             JOptionPane.showMessageDialog(this, "KTP atau Password Salah", "Gagal", JOptionPane.ERROR_MESSAGE);

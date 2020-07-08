@@ -19,7 +19,7 @@ public class ConnectionTesting {
     public static void main(String[] args) {
         // TODO code application logic here
         ConnectionManager conMan = new ConnectionManager();
-        Connection conn = conMan.Logon();
+        Connection conn = conMan.LogOn();
         System.out.println("Koneksi Tersedia");
     }
     

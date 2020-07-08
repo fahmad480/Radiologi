@@ -22,7 +22,7 @@ public class ConnectionManager {
    private String Password = "";
       
    
-    public Connection Logon(){
+    public Connection LogOn(){
        try {
            conn = (Connection) DriverManager.getConnection(url,Username,Password);
        } catch (SQLException ex){
@@ -31,7 +31,7 @@ public class ConnectionManager {
        return conn;
     }
     
-    public void Logoff(){
+    public void LogOff(){
        try {
            conn.close();
        } catch (SQLException ex) {

@@ -15,23 +15,27 @@ public class Pasien {
     private String alamat;
     private String hp;
     private String kelamin;
+    private String tmpLahir;
+    private String tglLahir;
     private Suster suster;
 
     public Pasien() {
     }
 
-    public Pasien(String ktp, String nama, String alamat, String hp, String kelamin, Suster suster) {
+    public Pasien(String ktp, String nama, String alamat, String hp, String kelamin, String tmpLahir, String tglLahir, Suster suster) {
         this.ktp = ktp;
         this.nama = nama;
         this.alamat = alamat;
         this.hp = hp;
         this.kelamin = kelamin;
+        this.tmpLahir = tmpLahir;
+        this.tglLahir = tglLahir;
         this.suster = suster;
     }
 
     @Override
     public String toString() {
-        return "Pasien{" + "ktp=" + ktp + ", nama=" + nama + ", alamat=" + alamat + ", hp=" + hp + ", kelamin=" + kelamin + ", suster=" + suster + '}';
+        return "Pasien{" + "ktp=" + ktp + ", nama=" + nama + ", alamat=" + alamat + ", hp=" + hp + ", kelamin=" + kelamin + ", tmpLahir=" + tmpLahir + ", tglLahir=" + tglLahir + ", suster=" + suster + '}';
     }
 
     public String getKtp() {
@@ -74,6 +78,22 @@ public class Pasien {
         this.kelamin = kelamin;
     }
 
+    public String getTmpLahir() {
+        return tmpLahir;
+    }
+
+    public void setTmpLahir(String tmpLahir) {
+        this.tmpLahir = tmpLahir;
+    }
+
+    public String getTglLahir() {
+        return tglLahir;
+    }
+
+    public void setTglLahir(String tglLahir) {
+        this.tglLahir = tglLahir;
+    }
+
     public Suster getSuster() {
         return suster;
     }
@@ -81,6 +101,6 @@ public class Pasien {
     public void setSuster(Suster suster) {
         this.suster = suster;
     }
-    
+
     
 }

@@ -13,21 +13,25 @@ public class Inventorylog {
     private String id;
     private Staff staff;
     private Inventory inventory;
+    private Supplier supplier;
     private String keterangan;
+    private String status;
 
     public Inventorylog() {
     }
 
-    public Inventorylog(String id, Staff staff, Inventory inventory, String keterangan) {
+    public Inventorylog(String id, Staff staff, Inventory inventory, Supplier supplier, String keterangan, String status) {
         this.id = id;
         this.staff = staff;
         this.inventory = inventory;
+        this.supplier = supplier;
         this.keterangan = keterangan;
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "Inventorylog{" + "id=" + id + ", staff=" + staff + ", inventory=" + inventory + ", keterangan=" + keterangan + '}';
+        return "Inventorylog{" + "id=" + id + ", staff=" + staff + ", inventory=" + inventory + ", supplier=" + supplier + ", keterangan=" + keterangan + ", status=" + status + '}';
     }
 
     public String getId() {
@@ -54,6 +58,14 @@ public class Inventorylog {
         this.inventory = inventory;
     }
 
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
     public String getKeterangan() {
         return keterangan;
     }
@@ -61,6 +73,14 @@ public class Inventorylog {
     public void setKeterangan(String keterangan) {
         this.keterangan = keterangan;
     }
-    
-    
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+            
 }

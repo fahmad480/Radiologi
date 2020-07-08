@@ -8,6 +8,8 @@ package Exec;
 import Connection.ConnectionManager;
 import Entity.Inventory;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class ExecuteInventory {
         
         }
     }catch(SQLException ex){
-        Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE,null,ex);
+        //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE,null,ex);
     }
     conMan.LogOff();
     return listInventory;

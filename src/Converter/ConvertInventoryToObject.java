@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entity;
+package Converter;
 
+import Entity.Inventory;
 import Exec.ExecuteInventory;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,7 +19,7 @@ public class ConvertInventoryToObject {
      List<Inventory> myInv = new ArrayList <Inventory>();
      ExecuteInventory ein = new ExecuteInventory();
      myInv = ein.getInventory();
-     String[][] dataInventory = new String [myInv.size()[4]];
+     String[][] dataInventory = new String [myInv.size()[5]];
      int i = 0;
      for (Inventory iv : myInv){
          dataInventory[i][0] = iv.getId();

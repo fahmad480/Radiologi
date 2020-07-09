@@ -26,6 +26,14 @@ public class MainGUI extends javax.swing.JFrame {
         
         lblRoles.setText(roles);
     }
+    
+    public MainGUI(String roles, String username) {
+        initComponents();
+        
+        lblRoles.setText(roles);
+        lblUsername.setText(username);
+        lblUsername.setVisible(false);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,6 +51,7 @@ public class MainGUI extends javax.swing.JFrame {
         btnSupplier = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         lblRoles = new javax.swing.JLabel();
+        lblUsername = new javax.swing.JLabel();
         pnlDokter = new javax.swing.JPanel();
         btnFormRadiologi = new javax.swing.JButton();
         pnlSuster = new javax.swing.JPanel();
@@ -110,6 +119,9 @@ public class MainGUI extends javax.swing.JFrame {
 
         lblRoles.setText("jLabel1");
         mainPanel.add(lblRoles, "card6");
+
+        lblUsername.setText("jLabel1");
+        mainPanel.add(lblUsername, "card6");
 
         pnlDokter.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -243,7 +255,7 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFormRadiologiActionPerformed
 
     private void btnFormTambahpasienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormTambahpasienActionPerformed
-        new AddPasienGUI().setVisible(true);
+        new AddPasienGUI("suster", lblUsername.getText()).setVisible(true);
     }//GEN-LAST:event_btnFormTambahpasienActionPerformed
 
     private void btnFormMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormMaintenanceActionPerformed
@@ -255,11 +267,11 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFormReportActionPerformed
 
     private void btnFormInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormInventoryActionPerformed
-        new InventoryGUI("staff").setVisible(true);
+        new InventoryGUI("staff", lblUsername.getText()).setVisible(true);
     }//GEN-LAST:event_btnFormInventoryActionPerformed
 
     private void btnFormInventoryRessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormInventoryRessActionPerformed
-        new InventoryGUI(lblRoles.getText()).setVisible(true);
+        new InventoryGUI("supplier", lblUsername.getText()).setVisible(true);
     }//GEN-LAST:event_btnFormInventoryRessActionPerformed
 
     /**
@@ -311,6 +323,7 @@ public class MainGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnSuster;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblRoles;
+    private javax.swing.JLabel lblUsername;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel pnlDokter;
     private javax.swing.JPanel pnlStaff;

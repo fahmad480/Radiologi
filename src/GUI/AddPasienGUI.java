@@ -11,13 +11,13 @@ import Entity.Suster;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author 48faraaz
  */
 public class AddPasienGUI extends javax.swing.JFrame {
-    public String suster = "";
 
     /**
      * Creates new form GuiRadiologiTambahPasien
@@ -27,10 +27,12 @@ public class AddPasienGUI extends javax.swing.JFrame {
         setDataPasien();
     }
     
-    public AddPasienGUI(String ktpSuster) {
+    public AddPasienGUI(String tipe, String ktpSuster) {
         initComponents();
         setDataPasien();
-        suster = ktpSuster;
+        lblTemp.setText(ktpSuster);
+        lblTemp.setVisible(false);
+        System.out.println(ktpSuster);
     }
     
     private void setDataPasien() {
@@ -75,50 +77,51 @@ public class AddPasienGUI extends javax.swing.JFrame {
         btnTambah = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        lblTemp = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Nama Pasien");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
         jLabel2.setText("Tempat, Tanggal Lahir");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
 
         jLabel3.setText("Alamat");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, -1, -1));
 
         jLabel4.setText("Nomor HP");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 450, -1, -1));
 
         jLabel5.setText("Kelamin");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, -1, -1));
 
         edtNamaPasien.setName("EdtNama"); // NOI18N
-        getContentPane().add(edtNamaPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, 481, -1));
+        getContentPane().add(edtNamaPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 481, -1));
 
         edtTPasien.setName("EdtTTL"); // NOI18N
-        getContentPane().add(edtTPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 339, -1));
+        getContentPane().add(edtTPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, 339, -1));
 
         edtAlamatPasien.setColumns(20);
         edtAlamatPasien.setRows(5);
         edtAlamatPasien.setName("EdtAlamat"); // NOI18N
         jScrollPane1.setViewportView(edtAlamatPasien);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, 481, 64));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 380, 481, 64));
 
         edtHpPasien.setName("EdtHp"); // NOI18N
-        getContentPane().add(edtHpPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 420, 481, -1));
+        getContentPane().add(edtHpPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, 481, -1));
 
         edtKtpPasien.setName("EdtKtp"); // NOI18N
-        getContentPane().add(edtKtpPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, 481, -1));
+        getContentPane().add(edtKtpPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, 481, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("Tambah Pasien Baru");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
 
         edtTLPasien.setDateFormatString("yyyy-MM-dd");
-        getContentPane().add(edtTLPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, 135, -1));
+        getContentPane().add(edtTLPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 350, 135, -1));
 
         tblPasien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -156,7 +159,7 @@ public class AddPasienGUI extends javax.swing.JFrame {
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 48, 660, 230));
 
         jLabel7.setText("Nomor KTP");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 450, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
 
         kelaminGroup.add(rP);
         rP.setText("Wanita");
@@ -178,11 +181,24 @@ public class AddPasienGUI extends javax.swing.JFrame {
 
         btnUpdate.setText("Update");
         btnUpdate.setName("BtnTambah"); // NOI18N
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 510, -1, -1));
 
         btnDelete.setText("Delete");
         btnDelete.setName("BtnTambah"); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 510, -1, -1));
+
+        lblTemp.setText("tempLabel");
+        getContentPane().add(lblTemp, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -235,12 +251,59 @@ public class AddPasienGUI extends javax.swing.JFrame {
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
         
         Exec.ExecuteSuster eSuster = new Exec.ExecuteSuster();
-        Suster IdSuster = eSuster.getRow(suster);
+        Suster IdSuster = eSuster.getRow(lblTemp.getText());
         
         Pasien pasien = new Pasien(ktp, nama, alamat, hp, kelamin, tmp_lahir, ft.format(tgl_lahir), IdSuster);
         Exec.ExecutePasien ePs = new Exec.ExecutePasien();
-        //int result = ePs.
+        int result = ePs.insertPasien(pasien);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah pasien berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataPasien();
+        } else {
+            JOptionPane.showMessageDialog(this, "Input gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        String ktp = edtKtpPasien.getText();
+        Exec.ExecutePasien ePs = new Exec.ExecutePasien();
+        int result = ePs.deletePasien(ktp);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Penghapusan pasien berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataPasien();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String nama = edtNamaPasien.getText();
+        String tmp_lahir = edtTPasien.getText();
+        Date tgl_lahir = edtTLPasien.getDate();
+        String ktp = edtKtpPasien.getText();
+        String hp = edtHpPasien.getText();
+        String alamat = edtAlamatPasien.getText();
+        String kelamin = "";
+        if(rL.isSelected()) {
+            kelamin = "l";
+        } else {
+            kelamin = "w";
+        }
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+        
+        Exec.ExecuteSuster eSuster = new Exec.ExecuteSuster();
+        Suster IdSuster = eSuster.getRow(lblTemp.getText());
+        
+        Pasien pasien = new Pasien(ktp, nama, alamat, hp, kelamin, tmp_lahir, ft.format(tgl_lahir), IdSuster);
+        Exec.ExecutePasien ePs = new Exec.ExecutePasien();
+        int result = ePs.updatePasien(pasien);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Update pasien berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataPasien();
+        } else {
+            JOptionPane.showMessageDialog(this, "update gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -298,6 +361,7 @@ public class AddPasienGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.ButtonGroup kelaminGroup;
+    private javax.swing.JLabel lblTemp;
     private javax.swing.JRadioButton rL;
     private javax.swing.JRadioButton rP;
     private javax.swing.JTable tblPasien;

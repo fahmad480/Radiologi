@@ -24,6 +24,12 @@ public class Maintenancelog {
         this.staff = staff;
         this.date = date;
     }
+    
+    public Maintenancelog(String keterangan, Staff staff, String date) {
+        this.keterangan = keterangan;
+        this.staff = staff;
+        this.date = date;
+    }
 
     public String getId() {
         return id;

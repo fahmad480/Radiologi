@@ -5,6 +5,15 @@
  */
 package GUI;
 
+import Converter.ConvertMaintenanceToObject;
+import Converter.ConvertPasienToObject;
+import Entity.Maintenancelog;
+import Entity.Staff;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author 48faraaz
@@ -16,6 +25,18 @@ public class MTGUI extends javax.swing.JFrame {
      */
     public MTGUI() {
         initComponents();
+        setDataMaintenance();
+    }
+    
+    private void setDataMaintenance() {
+        ConvertMaintenanceToObject cmto = new ConvertMaintenanceToObject();
+        String[][] dataMaintenance = cmto.getMaintenance();
+        tabelMaintenance.setModel(new javax.swing.table.DefaultTableModel(
+            dataMaintenance,
+            new String [] {
+                "id", "Keterangan", "Staff", "Tanggal"
+            }
+        ));
     }
 
     /**
@@ -31,29 +52,52 @@ public class MTGUI extends javax.swing.JFrame {
         tabelMaintenance = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        edtIdStaffMaintenance = new javax.swing.JTextField();
+        edtIdStaff = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        edtKeteranganMaintenance = new javax.swing.JTextArea();
-        Add = new javax.swing.JButton();
+        edtKeterangan = new javax.swing.JTextArea();
+        btnAdd = new javax.swing.JButton();
         edtTanggal = new com.toedter.calendar.JDateChooser();
-        Print = new javax.swing.JButton();
+        btnPrint = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        lblId = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tabelMaintenance.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "                Tanggal", "                  Nama ", "                     Info "
+                "id", "Keterangan", "Staff", "Tanggal"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelMaintenance.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelMaintenanceMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelMaintenance);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -66,25 +110,37 @@ public class MTGUI extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Keterangan");
 
-        edtKeteranganMaintenance.setColumns(20);
-        edtKeteranganMaintenance.setRows(5);
-        jScrollPane2.setViewportView(edtKeteranganMaintenance);
+        edtKeterangan.setColumns(20);
+        edtKeterangan.setRows(5);
+        jScrollPane2.setViewportView(edtKeterangan);
 
-        Add.setText("Add");
-        Add.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
         edtTanggal.setDateFormatString("yyyy-MM-dd");
 
-        Print.setText("Print");
-        Print.addActionListener(new java.awt.event.ActionListener() {
+        btnPrint.setText("Print All");
+
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PrintActionPerformed(evt);
+                btnUpdateActionPerformed(evt);
             }
         });
+
+        btnDelete.setText("Delete");
+        btnDelete.setToolTipText("");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        lblId.setText("temp");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -93,21 +149,26 @@ public class MTGUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel1))
+                            .addComponent(jLabel1)
+                            .addComponent(lblId))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                            .addComponent(edtIdStaffMaintenance)
+                            .addComponent(edtIdStaff)
                             .addComponent(edtTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(Print)
-                        .addGap(44, 44, 44)
-                        .addComponent(Add)))
+                        .addGap(0, 133, Short.MAX_VALUE)
+                        .addComponent(btnPrint)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnUpdate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -115,19 +176,24 @@ public class MTGUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(edtIdStaffMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edtIdStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(edtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(27, 27, 27)
+                        .addComponent(lblId))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Add)
-                    .addComponent(Print))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPrint)
+                    .addComponent(btnAdd)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnDelete))
                 .addContainerGap())
         );
 
@@ -139,14 +205,17 @@ public class MTGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(125, 125, 125)
-                .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -163,13 +232,80 @@ public class MTGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AddActionPerformed
+    private void tabelMaintenanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelMaintenanceMouseClicked
+        int row = tabelMaintenance.getSelectedRow();
+        String id = tabelMaintenance.getValueAt(row, 0).toString();
+        String keterangan = tabelMaintenance.getValueAt(row, 1).toString();
+        String staff = tabelMaintenance.getValueAt(row, 2).toString();
+        String tanggal = tabelMaintenance.getValueAt(row, 3).toString();
+        
+        edtKeterangan.setText(keterangan);
+        
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+        try {
+            Date date = ft.parse(tanggal);
+            edtTanggal.setDate(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+        edtIdStaff.setText(staff);
+        lblId.setText(id);
+        lblId.setVisible(false);
+    }//GEN-LAST:event_tabelMaintenanceMouseClicked
 
-    private void PrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PrintActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        String keterangan = edtKeterangan.getText();
+        Date tanggal = edtTanggal.getDate();
+        String staff = edtIdStaff.getText();
+        
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+        Exec.ExecuteStaff eStaff = new Exec.ExecuteStaff();
+        Staff getStaff = eStaff.getRow(staff);
+        
+        Maintenancelog maintenance = new Maintenancelog(keterangan, getStaff, ft.format(tanggal));
+        Exec.ExecuteMaintenance eMain = new Exec.ExecuteMaintenance();
+        int result = eMain.insertMaintenance(maintenance);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah record maintenance berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataMaintenance();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah record maintenance gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String id = lblId.getText();
+        String keterangan = edtKeterangan.getText();
+        Date tanggal = edtTanggal.getDate();
+        String staff = edtIdStaff.getText();
+        
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+        Exec.ExecuteStaff eStaff = new Exec.ExecuteStaff();
+        Staff getStaff = eStaff.getRow(staff);
+        
+        Maintenancelog maintenance = new Maintenancelog(id, keterangan, getStaff, ft.format(tanggal));
+        Exec.ExecuteMaintenance eMain = new Exec.ExecuteMaintenance();
+        int result = eMain.updateMaintenance(maintenance);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Update record maintenance berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataMaintenance();
+        } else {
+            JOptionPane.showMessageDialog(this, "Update record maintenance gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        String id = lblId.getText();
+        Exec.ExecuteMaintenance eMain = new Exec.ExecuteMaintenance();
+        int result = eMain.deleteMaintenance(id);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Hapus record maintenance berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataMaintenance();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus record maintenance gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,10 +343,12 @@ public class MTGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Add;
-    private javax.swing.JButton Print;
-    private javax.swing.JTextField edtIdStaffMaintenance;
-    private javax.swing.JTextArea edtKeteranganMaintenance;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnPrint;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JTextField edtIdStaff;
+    private javax.swing.JTextArea edtKeterangan;
     private com.toedter.calendar.JDateChooser edtTanggal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -219,6 +357,7 @@ public class MTGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblId;
     private javax.swing.JTable tabelMaintenance;
     // End of variables declaration//GEN-END:variables
 }

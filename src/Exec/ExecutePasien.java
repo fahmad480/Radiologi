@@ -52,4 +52,53 @@ public class ExecutePasien {
         conMan.LogOff();
         return listPs;
     }
+    
+    public int insertPasien(Pasien ps) {
+        int hasil = 0;
+        String query = "INSERT INTO pasien(ktp, nama, alamat, hp, kelamin, tmp_lahir, tgl_lahir, id_suster) VALUES('"+ps.getKtp()+"', '"+ps.getNama()+"', '"+ps.getAlamat()+"', '"+ps.getHp()+"', '"+ps.getKelamin()+"', '"+ps.getTmpLahir()+"', '"+ps.getTglLahir()+"', '"+ps.getSuster().getKtp()+"')";
+        System.out.println(query);
+        System.out.println(ps.getSuster().toString());
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            hasil = stm.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ExecutePasien.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        conMan.LogOff();
+        return hasil;
+    }
+    
+    public int deletePasien(String id) {
+        int hasil = 0;
+        String query = "DELETE FROM pasien WHERE ktp='"+id+"'";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            hasil = stm.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ExecutePasien.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        conMan.LogOff();
+        return hasil;
+    }
+    
+    public int updatePasien(Pasien ps) {
+        int hasil = 0;
+        Exec.ExecuteSuster eSuster = new Exec.ExecuteSuster();
+        Suster suster = eSuster.getRow(ps.getSuster().getKtp());
+        String query = "UPDATE pasien SET ktp='"+ps.getKtp()+"', nama='"+ps.getNama()+"', alamat='"+ps.getAlamat()+"', hp='"+ps.getHp()+"', kelamin='"+ps.getKelamin()+"', tmp_lahir='"+ps.getTmpLahir()+"', tgl_lahir='"+ps.getTglLahir()+"', id_suster='"+suster.getKtp()+"' WHERE ktp='"+ps.getKtp()+"'";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            hasil = stm.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ExecutePasien.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        conMan.LogOff();
+        return hasil;
+    }
 }

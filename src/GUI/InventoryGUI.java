@@ -18,14 +18,14 @@ public class InventoryGUI extends javax.swing.JFrame {
         initComponents();
     }
     
-    public InventoryGUI(String role) {
+    public InventoryGUI(String tipe, String idSupp) {
         initComponents();
         
-        if(role == "staff") {
+        if(tipe == "staff") {
             
         } else {
             edtSupplierInv.setEnabled(false);
-            edtSupplierInv.setText(role);
+            edtSupplierInv.setText(tipe);
         }
     }
 
@@ -38,8 +38,11 @@ public class InventoryGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableInventory = new javax.swing.JTable();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnStockAktif = new javax.swing.JButton();
+        btnStockPending = new javax.swing.JButton();
+        pnlUtama = new javax.swing.JPanel();
+        pnlStockAktif = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -54,8 +57,77 @@ public class InventoryGUI extends javax.swing.JFrame {
         edtTanggal = new com.toedter.calendar.JDateChooser();
         btnDelete = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableInventory = new javax.swing.JTable();
+        pnlStockPending = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jToolBar1.setRollover(true);
+
+        btnStockAktif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/files-o.png"))); // NOI18N
+        btnStockAktif.setText("Stock Aktif");
+        btnStockAktif.setFocusable(false);
+        btnStockAktif.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnStockAktif.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnStockAktif);
+
+        btnStockPending.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/file.png"))); // NOI18N
+        btnStockPending.setText("Stock Pending");
+        btnStockPending.setFocusable(false);
+        btnStockPending.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnStockPending.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnStockPending);
+
+        pnlUtama.setLayout(new java.awt.CardLayout());
+
+        pnlStockAktif.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setText("Stock yang Tersisa");
+        pnlStockAktif.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 13, -1, -1));
+
+        jLabel8.setText("Nama Barang");
+        pnlStockAktif.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 192, -1, -1));
+
+        jLabel9.setText("Kuantitas");
+        pnlStockAktif.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 221, -1, -1));
+
+        jLabel10.setText("Harga");
+        pnlStockAktif.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 250, -1, -1));
+
+        jLabel11.setText("Tanggal");
+        pnlStockAktif.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 276, -1, -1));
+        pnlStockAktif.add(edtNamaInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 189, 177, -1));
+        pnlStockAktif.add(edtJumlahInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 218, 177, -1));
+        pnlStockAktif.add(edtHargaInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 247, 177, -1));
+
+        jLabel12.setText("Supplier");
+        pnlStockAktif.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 308, -1, -1));
+        pnlStockAktif.add(edtSupplierInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 305, 177, -1));
+
+        btnTambahInv.setText("Tambah");
+        btnTambahInv.setActionCommand("");
+        btnTambahInv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahInvActionPerformed(evt);
+            }
+        });
+        pnlStockAktif.add(btnTambahInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 334, -1, -1));
+
+        edtTanggal.setDateFormatString("yyyy-MM-dd");
+        pnlStockAktif.add(edtTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 276, 177, -1));
+
+        btnDelete.setText("Delete");
+        pnlStockAktif.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 334, -1, -1));
+
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        pnlStockAktif.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 334, -1, -1));
 
         tableInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -80,106 +152,36 @@ public class InventoryGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableInventory);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("Stock yang Tersisa");
+        pnlStockAktif.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 48, 556, 128));
 
-        jLabel8.setText("Nama Barang");
+        pnlUtama.add(pnlStockAktif, "cardStockAktif");
 
-        jLabel9.setText("Kuantitas");
+        javax.swing.GroupLayout pnlStockPendingLayout = new javax.swing.GroupLayout(pnlStockPending);
+        pnlStockPending.setLayout(pnlStockPendingLayout);
+        pnlStockPendingLayout.setHorizontalGroup(
+            pnlStockPendingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 578, Short.MAX_VALUE)
+        );
+        pnlStockPendingLayout.setVerticalGroup(
+            pnlStockPendingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 401, Short.MAX_VALUE)
+        );
 
-        jLabel10.setText("Harga");
-
-        jLabel11.setText("Tanggal");
-
-        jLabel12.setText("Supplier");
-
-        btnTambahInv.setText("Tambah");
-        btnTambahInv.setActionCommand("");
-        btnTambahInv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTambahInvActionPerformed(evt);
-            }
-        });
-
-        edtTanggal.setDateFormatString("yyyy-MM-dd");
-
-        btnDelete.setText("Delete");
-
-        btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
+        pnlUtama.add(pnlStockPending, "cardStockPending");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(212, 212, 212))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel8)
-                                .addComponent(jLabel9)
-                                .addComponent(jLabel10)
-                                .addComponent(jLabel11)
-                                .addComponent(jLabel12))
-                            .addGap(36, 36, 36)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(edtSupplierInv, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                                .addComponent(edtNamaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                                .addComponent(edtJumlahInv, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                                .addComponent(edtHargaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                                .addComponent(edtTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(btnTambahInv)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnDelete)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnUpdate))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlUtama, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(edtNamaInv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(edtJumlahInv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(edtHargaInv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11)
-                    .addComponent(edtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(edtSupplierInv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpdate)
-                    .addComponent(btnDelete)
-                    .addComponent(btnTambahInv))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlUtama, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -231,6 +233,8 @@ public class InventoryGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnStockAktif;
+    private javax.swing.JButton btnStockPending;
     private javax.swing.JButton btnTambahInv;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JTextField edtHargaInv;
@@ -245,6 +249,10 @@ public class InventoryGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JPanel pnlStockAktif;
+    private javax.swing.JPanel pnlStockPending;
+    private javax.swing.JPanel pnlUtama;
     private javax.swing.JTable tableInventory;
     // End of variables declaration//GEN-END:variables
 }

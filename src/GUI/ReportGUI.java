@@ -42,29 +42,36 @@ public class ReportGUI extends javax.swing.JFrame {
 
         tabelReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "nama", "Tanggal dirawat", "Tanggal Keluar", "info"
+                "id", "Tanggal Cetak", "Oleh"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane1.setViewportView(tabelReport);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel6.setText("Report Radiologi");
+        jLabel6.setText("Record Radiologi");
 
         jLabel2.setText("sampai");
 
-        btnPrintReport.setText("Print");
+        btnPrintReport.setText("Print Record Radiologi");
 
         edtStartDate.setDateFormatString("yyyy-MM-dd");
 
@@ -103,9 +110,8 @@ public class ReportGUI extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
                     .addComponent(edtStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(edtEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

@@ -153,10 +153,10 @@ public class LoginForm extends javax.swing.JFrame {
                 new MainGUI("staff").setVisible(true);
             } else if(role == "suster") {
                 this.setVisible(false);
-                new MainGUI("suster").setVisible(true);
+                new MainGUI("suster", edtUsername.getText()).setVisible(true);
             } else {
                 this.setVisible(false);
-                new MainGUI("supplier").setVisible(true);
+                new MainGUI("supplier", edtUsername.getText()).setVisible(true);
             }
         } else {
             JOptionPane.showMessageDialog(this, "KTP atau Password Salah", "Gagal", JOptionPane.ERROR_MESSAGE);

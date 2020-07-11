@@ -12,7 +12,7 @@ package Entity;
 public class Inventorylog {
     private String id;
     private Staff staff;
-    private Inventory inventory;
+    private String inventory;
     private Supplier supplier;
     private String keterangan;
     private String status;
@@ -20,8 +20,16 @@ public class Inventorylog {
     public Inventorylog() {
     }
 
-    public Inventorylog(String id, Staff staff, Inventory inventory, Supplier supplier, String keterangan, String status) {
+    public Inventorylog(String id, Staff staff, String inventory, Supplier supplier, String keterangan, String status) {
         this.id = id;
+        this.staff = staff;
+        this.inventory = inventory;
+        this.supplier = supplier;
+        this.keterangan = keterangan;
+        this.status = status;
+    }
+
+    public Inventorylog(Staff staff, String inventory, Supplier supplier, String keterangan, String status) {
         this.staff = staff;
         this.inventory = inventory;
         this.supplier = supplier;
@@ -50,11 +58,11 @@ public class Inventorylog {
         this.staff = staff;
     }
 
-    public Inventory getInventory() {
+    public String getInventory() {
         return inventory;
     }
 
-    public void setInventory(Inventory inventory) {
+    public void setInventory(String inventory) {
         this.inventory = inventory;
     }
 
@@ -82,5 +90,5 @@ public class Inventorylog {
         this.status = status;
     }
 
-            
+                
 }

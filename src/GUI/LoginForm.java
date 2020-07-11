@@ -150,7 +150,7 @@ public class LoginForm extends javax.swing.JFrame {
                 new MainGUI("dokter").setVisible(true);
             } else if(role == "staff") {
                 this.setVisible(false);
-                new MainGUI("staff").setVisible(true);
+                new MainGUI("staff", edtUsername.getText()).setVisible(true);
             } else if(role == "suster") {
                 this.setVisible(false);
                 new MainGUI("suster", edtUsername.getText()).setVisible(true);

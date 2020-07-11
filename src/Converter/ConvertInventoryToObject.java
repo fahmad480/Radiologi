@@ -15,19 +15,21 @@ import java.util.List;
  * @author IdeaPad
  */
 public class ConvertInventoryToObject {
-   public String[][]getInventory(){
-     List<Inventory> myInv = new ArrayList <Inventory>();
-     ExecuteInventory ein = new ExecuteInventory();
-     myInv = ein.getInventory();
-     String[][] dataInventory = new String [myInv.size()[5]];
-     int i = 0;
-     for (Inventory iv : myInv){
-         dataInventory[i][0] = iv.getId();
-         dataInventory[i][1] = iv.getNama();
-         dataInventory[i][2] = iv.getJenis();
-         dataInventory[i][3] = iv.getKuantitas();
-         dataInventory[i][4] = iv.getSupplier();
-     }
-     return dataInventory;
-   } 
+    public String[][] getInventoryAktif() {
+        List<Inventory> myInv = new ArrayList<Inventory>();
+        ExecuteInventory eInv = new ExecuteInventory();
+        myInv = eInv.getAllInv();
+        String[][] dataInventory = new String[myInv.size()][6];
+        int i=0;
+        for(Inventory inv : myInv) {
+            dataInventory[i][0] = inv.getId();
+            dataInventory[i][1] = inv.getNama();
+            dataInventory[i][2] = inv.getJenis();
+            dataInventory[i][3] = String.valueOf(inv.getKuantitas());
+            dataInventory[i][4] = String.valueOf(inv.getHarga());
+            dataInventory[i][5] = inv.getSupplier().getId();
+            i++;
+        }
+        return dataInventory;
+    }
 }

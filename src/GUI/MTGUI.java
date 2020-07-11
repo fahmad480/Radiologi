@@ -28,6 +28,13 @@ public class MTGUI extends javax.swing.JFrame {
         setDataMaintenance();
     }
     
+    public MTGUI(String staff) {
+        initComponents();
+        setDataMaintenance();
+        edtIdStaff.setText(staff);
+        edtIdStaff.setEnabled(false);
+    }
+    
     private void setDataMaintenance() {
         ConvertMaintenanceToObject cmto = new ConvertMaintenanceToObject();
         String[][] dataMaintenance = cmto.getMaintenance();

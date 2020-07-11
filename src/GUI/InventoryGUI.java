@@ -5,6 +5,27 @@
  */
 package GUI;
 
+import Connection.ConnectionManager;
+import Converter.ConvertInventoryLogToObject;
+import Converter.ConvertInventoryToObject;
+import Converter.ConvertMaintenanceToObject;
+import Entity.Inventory;
+import Entity.Inventorylog;
+import Entity.Maintenancelog;
+import Entity.Staff;
+import Entity.Supplier;
+import Exec.ExecuteInventory;
+import java.awt.CardLayout;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author 48faraaz
@@ -16,17 +37,88 @@ public class InventoryGUI extends javax.swing.JFrame {
      */
     public InventoryGUI() {
         initComponents();
+        setDataAktif();
+        getSupplierListToComboBox();
     }
     
     public InventoryGUI(String tipe, String idSupp) {
         initComponents();
+        setDataAktif();
+        getSupplierListToComboBox();
+        getStaffListToComboBox();
         
         if(tipe == "staff") {
-            
+            lblRoles.setText("staff");
+            edtIdSupplierPending.setEnabled(true);
         } else {
-            edtSupplierInv.setEnabled(false);
-            edtSupplierInv.setText(tipe);
+            cl = (CardLayout) pnlUtama.getLayout();
+            cl.show(pnlUtama, "cardStockPending");
+            lblRoles.setText("supplier");
+            edtIdSupplierPending.setSelectedItem(idSupp);
+            edtIdSupplierPending.setEnabled(false);
+            cmbStatusPending.setSelectedItem("pending");
+            cmbStatusPending.setEnabled(false);
         }
+        
+        setDataPending();
+    }
+    
+    private void getSupplierListToComboBox() {
+        String query = "select ktp from supplier";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()) {
+                edtSupplierInv.addItem(rs.getString("ktp"));
+                edtIdSupplierPending.addItem(rs.getString("ktp"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void getStaffListToComboBox() {
+        String query = "select ktp from staff";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()) {
+                edtIdStaffPending.addItem(rs.getString("ktp"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void setDataAktif() {
+        ConvertInventoryToObject cito = new ConvertInventoryToObject();
+        String[][] dataInv = cito.getInventoryAktif();
+        tableInventory.setModel(new javax.swing.table.DefaultTableModel(
+            dataInv,
+            new String [] {
+                "id", "name", "jenis", "stock", "price", "supplier"
+            }
+        ));
+    }
+    
+    private void setDataPending() {
+        ConvertInventoryLogToObject cito = new ConvertInventoryLogToObject();
+        String[][] dataInv;
+        if(lblRoles.getText().equals("staff")) {
+            dataInv = cito.getInventoryPending("");
+        } else {
+            dataInv = cito.getInventoryPending(edtIdSupplierPending.getModel().getSelectedItem().toString());
+        }
+        tblPending.setModel(new javax.swing.table.DefaultTableModel(
+            dataInv,
+            new String [] {
+                "id", "staff", "inv", "supplier", "keterangan", "status"
+            }
+        ));
     }
 
     /**
@@ -47,19 +139,42 @@ public class InventoryGUI extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         edtNamaInv = new javax.swing.JTextField();
         edtJumlahInv = new javax.swing.JTextField();
         edtHargaInv = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        edtSupplierInv = new javax.swing.JTextField();
         btnTambahInv = new javax.swing.JButton();
-        edtTanggal = new com.toedter.calendar.JDateChooser();
         btnDelete = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableInventory = new javax.swing.JTable();
+        edtIdInv = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        edtJenisInv = new javax.swing.JComboBox();
+        edtSupplierInv = new javax.swing.JComboBox();
         pnlStockPending = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblPending = new javax.swing.JTable();
+        jLabel13 = new javax.swing.JLabel();
+        edtIdInventoryPending = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        edtKeteranganPending = new javax.swing.JTextArea();
+        jLabel17 = new javax.swing.JLabel();
+        cmbStatusPending = new javax.swing.JComboBox();
+        btnTambahPending = new javax.swing.JButton();
+        btnDeletePending = new javax.swing.JButton();
+        btnUbahPending = new javax.swing.JButton();
+        edtIdPending = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        edtIdSupplierPending = new javax.swing.JComboBox();
+        edtIdStaffPending = new javax.swing.JComboBox();
+        jLabel20 = new javax.swing.JLabel();
+        lblRoles = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,6 +185,11 @@ public class InventoryGUI extends javax.swing.JFrame {
         btnStockAktif.setFocusable(false);
         btnStockAktif.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnStockAktif.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnStockAktif.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStockAktifActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnStockAktif);
 
         btnStockPending.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/file.png"))); // NOI18N
@@ -77,6 +197,11 @@ public class InventoryGUI extends javax.swing.JFrame {
         btnStockPending.setFocusable(false);
         btnStockPending.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnStockPending.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnStockPending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStockPendingActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnStockPending);
 
         pnlUtama.setLayout(new java.awt.CardLayout());
@@ -87,24 +212,20 @@ public class InventoryGUI extends javax.swing.JFrame {
         jLabel3.setText("Stock yang Tersisa");
         pnlStockAktif.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 13, -1, -1));
 
-        jLabel8.setText("Nama Barang");
-        pnlStockAktif.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 192, -1, -1));
+        jLabel8.setText("ID Barang");
+        pnlStockAktif.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
 
         jLabel9.setText("Kuantitas");
-        pnlStockAktif.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 221, -1, -1));
+        pnlStockAktif.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
 
         jLabel10.setText("Harga");
-        pnlStockAktif.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 250, -1, -1));
-
-        jLabel11.setText("Tanggal");
-        pnlStockAktif.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 276, -1, -1));
-        pnlStockAktif.add(edtNamaInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 189, 177, -1));
-        pnlStockAktif.add(edtJumlahInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 218, 177, -1));
-        pnlStockAktif.add(edtHargaInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 247, 177, -1));
+        pnlStockAktif.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, -1, -1));
+        pnlStockAktif.add(edtNamaInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 440, -1));
+        pnlStockAktif.add(edtJumlahInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 280, 440, -1));
+        pnlStockAktif.add(edtHargaInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 440, -1));
 
         jLabel12.setText("Supplier");
-        pnlStockAktif.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 308, -1, -1));
-        pnlStockAktif.add(edtSupplierInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 305, 177, -1));
+        pnlStockAktif.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, -1, -1));
 
         btnTambahInv.setText("Tambah");
         btnTambahInv.setActionCommand("");
@@ -113,13 +234,15 @@ public class InventoryGUI extends javax.swing.JFrame {
                 btnTambahInvActionPerformed(evt);
             }
         });
-        pnlStockAktif.add(btnTambahInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 334, -1, -1));
-
-        edtTanggal.setDateFormatString("yyyy-MM-dd");
-        pnlStockAktif.add(edtTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 276, 177, -1));
+        pnlStockAktif.add(btnTambahInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 370, -1, -1));
 
         btnDelete.setText("Delete");
-        pnlStockAktif.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 334, -1, -1));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        pnlStockAktif.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, -1, -1));
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -127,73 +250,354 @@ public class InventoryGUI extends javax.swing.JFrame {
                 btnUpdateActionPerformed(evt);
             }
         });
-        pnlStockAktif.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 334, -1, -1));
+        pnlStockAktif.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 370, -1, -1));
 
         tableInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "id", "name", "stock", "price", "supplier"
+                "id", "name", "jenis", "stock", "price", "supplier"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableInventory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableInventoryMouseClicked(evt);
+            }
         });
         jScrollPane1.setViewportView(tableInventory);
 
         pnlStockAktif.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 48, 556, 128));
+        pnlStockAktif.add(edtIdInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 440, -1));
+
+        jLabel11.setText("Jenis");
+        pnlStockAktif.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, -1));
+
+        jLabel18.setText("Nama Barang");
+        pnlStockAktif.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, -1));
+
+        edtJenisInv.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "barang", "alat" }));
+        pnlStockAktif.add(edtJenisInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 250, 440, -1));
+
+        pnlStockAktif.add(edtSupplierInv, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 440, -1));
 
         pnlUtama.add(pnlStockAktif, "cardStockAktif");
 
-        javax.swing.GroupLayout pnlStockPendingLayout = new javax.swing.GroupLayout(pnlStockPending);
-        pnlStockPending.setLayout(pnlStockPendingLayout);
-        pnlStockPendingLayout.setHorizontalGroup(
-            pnlStockPendingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 578, Short.MAX_VALUE)
-        );
-        pnlStockPendingLayout.setVerticalGroup(
-            pnlStockPendingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 401, Short.MAX_VALUE)
-        );
+        pnlStockPending.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setText("Stock Pending");
+        pnlStockPending.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
+
+        tblPending.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "id", "staff", "inv", "supplier", "keterangan", "status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblPending.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPendingMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblPending);
+
+        pnlStockPending.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 554, 126));
+
+        jLabel13.setText("ID");
+        pnlStockPending.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
+        pnlStockPending.add(edtIdInventoryPending, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 430, -1));
+
+        jLabel14.setText("ID Inventory");
+        pnlStockPending.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
+
+        jLabel15.setText("Status");
+        pnlStockPending.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, -1, -1));
+
+        jLabel16.setText("<html>Masukan keterangan<br>barang, harga,<br>kuantitas, dll</html>");
+        pnlStockPending.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 300, -1, -1));
+        jLabel16.getAccessibleContext().setAccessibleName("Keterangan");
+
+        edtKeteranganPending.setColumns(20);
+        edtKeteranganPending.setRows(5);
+        jScrollPane3.setViewportView(edtKeteranganPending);
+
+        pnlStockPending.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 300, 300, 50));
+
+        jLabel17.setText("ID Supplier");
+        pnlStockPending.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
+
+        cmbStatusPending.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "pending", "ditolak", "diterima" }));
+        pnlStockPending.add(cmbStatusPending, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, 430, -1));
+
+        btnTambahPending.setText("Tambah");
+        btnTambahPending.setActionCommand("");
+        btnTambahPending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahPendingActionPerformed(evt);
+            }
+        });
+        pnlStockPending.add(btnTambahPending, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 390, -1, -1));
+
+        btnDeletePending.setText("Delete");
+        btnDeletePending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletePendingActionPerformed(evt);
+            }
+        });
+        pnlStockPending.add(btnDeletePending, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 390, -1, -1));
+
+        btnUbahPending.setText("Update");
+        btnUbahPending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUbahPendingActionPerformed(evt);
+            }
+        });
+        pnlStockPending.add(btnUbahPending, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, -1, -1));
+
+        edtIdPending.setEnabled(false);
+        pnlStockPending.add(edtIdPending, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 430, -1));
+
+        jLabel19.setText("ID Staff");
+        pnlStockPending.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
+
+        pnlStockPending.add(edtIdSupplierPending, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, 430, -1));
+
+        pnlStockPending.add(edtIdStaffPending, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 430, -1));
+
+        jLabel20.setText("Keterangan");
+        pnlStockPending.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, -1));
 
         pnlUtama.add(pnlStockPending, "cardStockPending");
+
+        lblRoles.setText("jLabel1");
+        pnlUtama.add(lblRoles, "card4");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlUtama, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+            .addComponent(pnlUtama, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlUtama, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pnlUtama, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+    private void btnStockAktifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStockAktifActionPerformed
+        if(lblRoles.getText() == "staff") {
+            cl = (CardLayout) pnlUtama.getLayout();
+            cl.show(pnlUtama, "cardStockAktif");
+        } else {
+            JOptionPane.showMessageDialog(this, "Kamu tidak bisa masuk ke menu ini", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnStockAktifActionPerformed
+
+    private void btnStockPendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStockPendingActionPerformed
+        cl = (CardLayout) pnlUtama.getLayout();
+        cl.show(pnlUtama, "cardStockPending");
+    }//GEN-LAST:event_btnStockPendingActionPerformed
+
+    private void tableInventoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableInventoryMouseClicked
+        int row = tableInventory.getSelectedRow();
+        String id = tableInventory.getValueAt(row, 0).toString();
+        String nama = tableInventory.getValueAt(row, 1).toString();
+        String jenis = tableInventory.getValueAt(row, 2).toString();
+        String stock = tableInventory.getValueAt(row, 3).toString();
+        String price = tableInventory.getValueAt(row, 4).toString();
+        String supplier = tableInventory.getValueAt(row, 5).toString();
         
-    }//GEN-LAST:event_btnUpdateActionPerformed
+        edtIdInv.setText(id);
+        edtNamaInv.setText(nama);
+        edtJenisInv.setSelectedItem(jenis);
+        edtJumlahInv.setText(stock);
+        edtHargaInv.setText(price);
+        edtSupplierInv.setSelectedItem(supplier);
+    }//GEN-LAST:event_tableInventoryMouseClicked
 
     private void btnTambahInvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahInvActionPerformed
+        String id = edtIdInv.getText();
+        String nama = edtNamaInv.getText();
+        String jenis = String.valueOf(edtJenisInv.getModel().getSelectedItem());
+        int stock = Integer.parseInt(edtJumlahInv.getText());
+        int price = Integer.parseInt(edtHargaInv.getText());
+        String supplier = String.valueOf(edtSupplierInv.getModel().getSelectedItem());
         
+        Exec.ExecuteSupplier eSupp = new Exec.ExecuteSupplier();
+        Supplier getSupp = eSupp.getRow(supplier);
+        
+        Inventory inv = new Inventory(id, nama, jenis, stock, price, getSupp);
+        Exec.ExecuteInventory eInv = new Exec.ExecuteInventory();
+        int result = eInv.insertInventory(inv);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah inventory berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataAktif();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah inventory gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnTambahInvActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        String id = edtIdInv.getText();
+        Exec.ExecuteInventory eInv = new Exec.ExecuteInventory();
+        int result = eInv.deleteInventory(id);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Hapus inventory berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataAktif();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus inventory gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String id = edtIdInv.getText();
+        String nama = edtNamaInv.getText();
+        String jenis = String.valueOf(edtJenisInv.getModel().getSelectedItem());
+        int stock = Integer.parseInt(edtJumlahInv.getText());
+        int price = Integer.parseInt(edtHargaInv.getText());
+        String supplier = String.valueOf(edtSupplierInv.getModel().getSelectedItem());
+        
+        Exec.ExecuteSupplier eSupp = new Exec.ExecuteSupplier();
+        Supplier getSupp = eSupp.getRow(supplier);
+        
+        Inventory inv = new Inventory(id, nama, jenis, stock, price, getSupp);
+        Exec.ExecuteInventory eInv = new Exec.ExecuteInventory();
+        int result = eInv.updateInventory(inv);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Update inventory berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataAktif();
+        } else {
+            JOptionPane.showMessageDialog(this, "Update inventory gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnTambahPendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPendingActionPerformed
+        String id = edtIdPending.getText();
+        String staff = edtIdStaffPending.getModel().getSelectedItem().toString();
+        String inv = edtIdInventoryPending.getText();
+        String supplier = edtIdSupplierPending.getModel().getSelectedItem().toString();
+        String keterangan = edtKeteranganPending.getText();
+        String status = cmbStatusPending.getModel().getSelectedItem().toString();
+        
+        Exec.ExecuteSupplier eSupp = new Exec.ExecuteSupplier();
+        Supplier getSupp = eSupp.getRow(supplier);
+        
+        Exec.ExecuteStaff eStaff = new Exec.ExecuteStaff();
+        Staff getStaff = eStaff.getRow(staff);
+        
+        Inventorylog invLog = new Inventorylog(getStaff, inv, getSupp, keterangan, status);
+        Exec.ExecuteInventoryLog eInv = new Exec.ExecuteInventoryLog();
+        int result = eInv.insertInventoryPending(invLog);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah inventory log berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataPending();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah inventory log gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTambahPendingActionPerformed
+
+    private void tblPendingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPendingMouseClicked
+        int row = tblPending.getSelectedRow();
+        String id = tblPending.getValueAt(row, 0).toString();
+        String staff = tblPending.getValueAt(row, 1).toString();
+        String inv = tblPending.getValueAt(row, 2).toString();
+        String supplier = tblPending.getValueAt(row, 3).toString();
+        String keterangan = tblPending.getValueAt(row, 4).toString();
+        String status = tblPending.getValueAt(row, 5).toString();
+        
+        edtIdPending.setText(id);
+        edtIdStaffPending.setSelectedItem(staff);
+        edtIdInventoryPending.setText(inv);
+        edtIdSupplierPending.setSelectedItem(supplier);
+        edtKeteranganPending.setText(keterangan);
+        cmbStatusPending.setSelectedItem(status);
+        
+    }//GEN-LAST:event_tblPendingMouseClicked
+
+    private void btnDeletePendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletePendingActionPerformed
+        String id = edtIdPending.getText();
+        Exec.ExecuteInventoryLog eInv = new Exec.ExecuteInventoryLog();
+        int result = eInv.deleteInventoryPending(id);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Hapus inventory log berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataPending();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus inventory log gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeletePendingActionPerformed
+
+    private void btnUbahPendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahPendingActionPerformed
+        String id = edtIdPending.getText();
+        String staff = edtIdStaffPending.getModel().getSelectedItem().toString();
+        String inv = edtIdInventoryPending.getText();
+        String supplier = edtIdSupplierPending.getModel().getSelectedItem().toString();
+        String keterangan = edtKeteranganPending.getText();
+        String status = cmbStatusPending.getModel().getSelectedItem().toString();
+        
+        Exec.ExecuteSupplier eSupp = new Exec.ExecuteSupplier();
+        Supplier getSupp = eSupp.getRow(supplier);
+        
+        Exec.ExecuteStaff eStaff = new Exec.ExecuteStaff();
+        Staff getStaff = eStaff.getRow(staff);
+        
+        Inventorylog invLog = new Inventorylog(id, getStaff, inv, getSupp, keterangan, status);
+        Exec.ExecuteInventoryLog eInv = new Exec.ExecuteInventoryLog();
+        int result = eInv.updateInventoryPending(invLog);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Update inventory log berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataPending();
+        } else {
+            JOptionPane.showMessageDialog(this, "Update inventory log gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUbahPendingActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,29 +634,53 @@ public class InventoryGUI extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    private CardLayout cl;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeletePending;
     private javax.swing.JButton btnStockAktif;
     private javax.swing.JButton btnStockPending;
     private javax.swing.JButton btnTambahInv;
+    private javax.swing.JButton btnTambahPending;
+    private javax.swing.JButton btnUbahPending;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox cmbStatusPending;
     private javax.swing.JTextField edtHargaInv;
+    private javax.swing.JTextField edtIdInv;
+    private javax.swing.JTextField edtIdInventoryPending;
+    private javax.swing.JTextField edtIdPending;
+    private javax.swing.JComboBox edtIdStaffPending;
+    private javax.swing.JComboBox edtIdSupplierPending;
+    private javax.swing.JComboBox edtJenisInv;
     private javax.swing.JTextField edtJumlahInv;
+    private javax.swing.JTextArea edtKeteranganPending;
     private javax.swing.JTextField edtNamaInv;
-    private javax.swing.JTextField edtSupplierInv;
-    private com.toedter.calendar.JDateChooser edtTanggal;
+    private javax.swing.JComboBox edtSupplierInv;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lblRoles;
     private javax.swing.JPanel pnlStockAktif;
     private javax.swing.JPanel pnlStockPending;
     private javax.swing.JPanel pnlUtama;
     private javax.swing.JTable tableInventory;
+    private javax.swing.JTable tblPending;
     // End of variables declaration//GEN-END:variables
 }

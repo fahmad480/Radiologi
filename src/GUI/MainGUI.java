@@ -259,7 +259,7 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFormTambahpasienActionPerformed
 
     private void btnFormMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormMaintenanceActionPerformed
-        new MTGUI().setVisible(true);
+        new MTGUI(lblUsername.getText()).setVisible(true);
     }//GEN-LAST:event_btnFormMaintenanceActionPerformed
 
     private void btnFormReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormReportActionPerformed

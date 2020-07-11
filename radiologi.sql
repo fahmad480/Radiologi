@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 08, 2020 at 04:41 PM
+-- Generation Time: Jul 11, 2020 at 05:37 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -42,8 +42,6 @@ CREATE TABLE `dokter` (
 --
 
 INSERT INTO `dokter` (`ktp`, `password`, `nama`, `alamat`, `hp`, `kelamin`) VALUES
-('1111111111111111', '', 'dokter1', 'bandung', '111111111111', 'l'),
-('1111111111111112', '', 'dokter2', 'jakarta', '111111111112', 'w'),
 ('d', 'd', 'namakudokter', 'bandung', '123123', 'l');
 
 -- --------------------------------------------------------
@@ -57,6 +55,7 @@ CREATE TABLE `inventory` (
   `nama` varchar(50) NOT NULL,
   `jenis` enum('alat','barang') NOT NULL,
   `kuantitas` int(11) NOT NULL,
+  `harga` int(11) NOT NULL,
   `id_supplier` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -64,10 +63,10 @@ CREATE TABLE `inventory` (
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `nama`, `jenis`, `kuantitas`, `id_supplier`) VALUES
-('film01', 'Film 30x50', 'barang', 50, 'supplier01'),
-('film02', 'Film 40x70', 'barang', 25, 'supplier01'),
-('tools01', 'Alat Scan Radiologi Utama', 'alat', 1, 'supplier02');
+INSERT INTO `inventory` (`id`, `nama`, `jenis`, `kuantitas`, `harga`, `id_supplier`) VALUES
+('film01', 'Film 30x50', 'barang', 50, 0, 'supplier01'),
+('film02', 'Film 40x70', 'barang', 25, 0, 'supplier01'),
+('tools01', 'Alat Scan Radiologi Utama', 'alat', 1, 0, 'supplier02');
 
 -- --------------------------------------------------------
 
@@ -91,9 +90,22 @@ CREATE TABLE `inventoryradiologi` (
 CREATE TABLE `inventory_log` (
   `id` int(11) NOT NULL,
   `id_staff` varchar(11) NOT NULL,
-  `id_inv` varchar(11) NOT NULL,
-  `keterangan` int(11) NOT NULL
+  `nama_inv` varchar(11) NOT NULL,
+  `id_supplier` varchar(11) NOT NULL,
+  `keterangan` mediumtext NOT NULL,
+  `status` enum('pending','ditolak','diterima') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `inventory_log`
+--
+
+INSERT INTO `inventory_log` (`id`, `id_staff`, `nama_inv`, `id_supplier`, `keterangan`, `status`) VALUES
+(1, 'st', 'film 30x50', 'su', 'ini film ya bro', 'pending'),
+(2, 'st', 'film 40x50', 'su', 'ini film ya bro', 'pending'),
+(4, 'st', 'asdasd', 'supplier01', 'ini film ya bro', 'diterima'),
+(5, 'st', 'film 50x50', 'su', 'film 50x50\nharga 50000/pcs\nkuantitas 100\nkualitas brand udin', 'pending'),
+(7, 'st', 'film 60x50', 'supplier02', 'film 50x50\nharga 50000/pcs\nkuantitas 100\nkualitas brand udin', 'diterima');
 
 -- --------------------------------------------------------
 
@@ -108,6 +120,13 @@ CREATE TABLE `maintenance_log` (
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `maintenance_log`
+--
+
+INSERT INTO `maintenance_log` (`id`, `keterangan`, `id_staff`, `date`) VALUES
+(1, 'maintenance makan', 'st', '2020-07-01');
+
 -- --------------------------------------------------------
 
 --
@@ -120,6 +139,8 @@ CREATE TABLE `pasien` (
   `alamat` text NOT NULL,
   `hp` varchar(13) NOT NULL,
   `kelamin` enum('l','w') NOT NULL,
+  `tmp_lahir` varchar(25) NOT NULL,
+  `tgl_lahir` varchar(10) NOT NULL DEFAULT '0000-00-00',
   `id_suster` varchar(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -127,9 +148,10 @@ CREATE TABLE `pasien` (
 -- Dumping data for table `pasien`
 --
 
-INSERT INTO `pasien` (`ktp`, `nama`, `alamat`, `hp`, `kelamin`, `id_suster`) VALUES
-('4444444444444441', 'deniz', 'cikutra', '444444444441', 'l', '2222222222222222'),
-('4444444444444442', 'agnez', 'sukasenang', '444444444442', 'w', '2222222222222221');
+INSERT INTO `pasien` (`ktp`, `nama`, `alamat`, `hp`, `kelamin`, `tmp_lahir`, `tgl_lahir`, `id_suster`) VALUES
+('4444444444444441', 'deniz', 'cikutra', '444444444441', 'l', 'Surabaya', '1999-10-26', 'sus'),
+('4444444444444442', 'agnez', 'sukasenang', '444444444442', 'w', 'jakarta', '1998-11-01', 'sus'),
+('4444444444444443', 'triz', 'sukasenang', '444444444443', 'l', 'bandung', '2000-06-01', 'sus');
 
 -- --------------------------------------------------------
 
@@ -292,8 +314,8 @@ ALTER TABLE `inventoryradiologi`
 --
 ALTER TABLE `inventory_log`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_inv` (`id_inv`),
-  ADD KEY `id_staff` (`id_staff`);
+  ADD KEY `id_staff` (`id_staff`),
+  ADD KEY `id_supplier` (`id_supplier`);
 
 --
 -- Indexes for table `maintenance_log`
@@ -372,13 +394,13 @@ ALTER TABLE `inventoryradiologi`
 -- AUTO_INCREMENT for table `inventory_log`
 --
 ALTER TABLE `inventory_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `maintenance_log`
 --
 ALTER TABLE `maintenance_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `radiologi`
@@ -419,8 +441,8 @@ ALTER TABLE `inventoryradiologi`
 -- Constraints for table `inventory_log`
 --
 ALTER TABLE `inventory_log`
-  ADD CONSTRAINT `inventory_log_ibfk_1` FOREIGN KEY (`id_inv`) REFERENCES `inventory` (`id`),
-  ADD CONSTRAINT `inventory_log_ibfk_2` FOREIGN KEY (`id_staff`) REFERENCES `staff` (`ktp`);
+  ADD CONSTRAINT `inventory_log_ibfk_2` FOREIGN KEY (`id_staff`) REFERENCES `staff` (`ktp`),
+  ADD CONSTRAINT `inventory_log_ibfk_3` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`ktp`);
 
 --
 -- Constraints for table `maintenance_log`

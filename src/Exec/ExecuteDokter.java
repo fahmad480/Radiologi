@@ -6,9 +6,7 @@
 package Exec;
 
 import Connection.ConnectionManager;
-import Entity.Recordlog;
-import Entity.Staff;
-import Entity.Suster;
+import Entity.Dokter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,17 +20,17 @@ import java.util.logging.Logger;
  *
  * @author 48faraaz
  */
-public class ExecuteStaff {
-    public List<Staff> getAllStaff() {
-        List<Staff> listS = new ArrayList<>();
-        String query = "SELECT * FROM staff";
+public class ExecuteDokter {
+    public List<Dokter> getAllDokter() {
+        List<Dokter> listS = new ArrayList<>();
+        String query = "SELECT * FROM dokter";
         ConnectionManager conMan = new ConnectionManager();
         Connection conn = conMan.LogOn();
         try {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(query);
             while(rs.next()) {
-                Staff s = new Staff();
+                Dokter s = new Dokter();
                 s.setKtp(rs.getString("ktp"));
                 s.setNama(rs.getString("nama"));
                 s.setAlamat(rs.getString("alamat"));
@@ -41,76 +39,76 @@ public class ExecuteStaff {
                 listS.add(s);
             } 
         } catch (SQLException ex) {
-            Logger.getLogger(ExecuteStaff.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExecuteDokter.class.getName()).log(Level.SEVERE, null, ex);
         }
         conMan.LogOff();
         return listS;
     }
     
-    public int insertStaff(Staff ps) {
+    public int insertDokter(Dokter ps) {
         int hasil = 0;
-        String query = "INSERT INTO staff(ktp, password, nama, alamat, hp, kelamin) VALUES('"+ps.getKtp()+"', '"+ps.getKtp()+"', '"+ps.getNama()+"', '"+ps.getAlamat()+"', '"+ps.getHp()+"', '"+ps.getKelamin()+"')";
+        String query = "INSERT INTO dokter(ktp, password, nama, alamat, hp, kelamin) VALUES('"+ps.getKtp()+"', '"+ps.getKtp()+"', '"+ps.getNama()+"', '"+ps.getAlamat()+"', '"+ps.getHp()+"', '"+ps.getKelamin()+"')";
         ConnectionManager conMan = new ConnectionManager();
         Connection conn = conMan.LogOn();
         try {
             Statement stm = conn.createStatement();
             hasil = stm.executeUpdate(query);
         } catch (SQLException ex) {
-            Logger.getLogger(ExecuteStaff.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExecuteDokter.class.getName()).log(Level.SEVERE, null, ex);
         }
         conMan.LogOff();
         return hasil;
     }
     
-    public int deleteStaff(String id) {
+    public int deleteDokter(String id) {
         int hasil = 0;
-        String query = "DELETE FROM staff WHERE ktp='"+id+"'";
+        String query = "DELETE FROM dokter WHERE ktp='"+id+"'";
         ConnectionManager conMan = new ConnectionManager();
         Connection conn = conMan.LogOn();
         try {
             Statement stm = conn.createStatement();
             hasil = stm.executeUpdate(query);
         } catch (SQLException ex) {
-            Logger.getLogger(ExecuteStaff.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExecuteDokter.class.getName()).log(Level.SEVERE, null, ex);
         }
         conMan.LogOff();
         return hasil;
     }
     
-    public int updateStaff(Staff ps) {
+    public int updateDokter(Dokter ps) {
         int hasil = 0;
-        String query = "UPDATE staff SET ktp='"+ps.getKtp()+"', nama='"+ps.getNama()+"', alamat='"+ps.getAlamat()+"', hp='"+ps.getHp()+"', kelamin='"+ps.getKelamin()+"' WHERE ktp='"+ps.getKtp()+"'";
+        String query = "UPDATE dokter SET ktp='"+ps.getKtp()+"', nama='"+ps.getNama()+"', alamat='"+ps.getAlamat()+"', hp='"+ps.getHp()+"', kelamin='"+ps.getKelamin()+"' WHERE ktp='"+ps.getKtp()+"'";
         ConnectionManager conMan = new ConnectionManager();
         Connection conn = conMan.LogOn();
         try {
             Statement stm = conn.createStatement();
             hasil = stm.executeUpdate(query);
         } catch (SQLException ex) {
-            Logger.getLogger(ExecuteStaff.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExecuteDokter.class.getName()).log(Level.SEVERE, null, ex);
         }
         conMan.LogOff();
         return hasil;
     }
     
-    public Staff getRow(String ktp) {
-        Staff staff = new Staff();
-        String query = "SELECT * FROM staff WHERE ktp='"+ktp+"'";
+    public Dokter getRow(String ktp) {
+        Dokter suster = new Dokter();
+        String query = "SELECT * FROM suster WHERE ktp='"+ktp+"'";
         ConnectionManager conMan = new ConnectionManager();
         Connection conn = conMan.LogOn();
         try {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(query);
             if(rs.next()) {
-                staff.setKtp(rs.getString("ktp"));
-                staff.setNama(rs.getString("nama"));
-                staff.setHp(rs.getString("hp"));
-                staff.setAlamat(rs.getString("alamat"));
-                staff.setKelamin(rs.getString("kelamin"));
+                suster.setKtp(rs.getString("ktp"));
+                suster.setNama(rs.getString("nama"));
+                suster.setHp(rs.getString("hp"));
+                suster.setAlamat(rs.getString("alamat"));
+                suster.setKelamin(rs.getString("kelamin"));
             }
         } catch (SQLException ex) {
-            //Logger.getLogger(ExecuteLogin.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ExecuteDokter.class.getName()).log(Level.SEVERE, null, ex);
         }
         conMan.LogOff();
-        return staff;
+        return suster;
     }
 }

@@ -5,7 +5,16 @@
  */
 package GUI;
 
+import Converter.ConvertDokterToObject;
+import Converter.ConvertStaffToObject;
+import Converter.ConvertSupplierToObject;
+import Converter.ConvertSusterToObject;
+import Entity.Dokter;
+import Entity.Staff;
+import Entity.Supplier;
+import Entity.Suster;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +27,54 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
      */
     public TambahPegawaiGUI() {
         initComponents();
+        setDataDokter();
+        setDataSuster();
+        setDataStaff();
+        setDataSupplier();
+    }
+    
+    private void setDataDokter() {
+        ConvertDokterToObject cito = new ConvertDokterToObject();
+        String[][] dataDokter = cito.getDokter();
+        tblDokter.setModel(new javax.swing.table.DefaultTableModel(
+            dataDokter,
+            new String [] {
+                "ktp", "nama", "alamat", "hp", "kelamin"
+            }
+        ));
+    }
+    
+    private void setDataSuster() {
+        ConvertSusterToObject cito = new ConvertSusterToObject();
+        String[][] dataSuster = cito.getSuster();
+        tblSuster.setModel(new javax.swing.table.DefaultTableModel(
+            dataSuster,
+            new String [] {
+                "ktp", "nama", "alamat", "hp", "kelamin"
+            }
+        ));
+    }
+    
+    private void setDataStaff() {
+        ConvertStaffToObject cito = new ConvertStaffToObject();
+        String[][] dataStaff = cito.getStaff();
+        tblStaff.setModel(new javax.swing.table.DefaultTableModel(
+            dataStaff,
+            new String [] {
+                "ktp", "nama", "alamat", "hp", "kelamin"
+            }
+        ));
+    }
+    
+    private void setDataSupplier() {
+        ConvertSupplierToObject cito = new ConvertSupplierToObject();
+        String[][] dataSupplier = cito.getSupplier();
+        tblSupplier.setModel(new javax.swing.table.DefaultTableModel(
+            dataSupplier,
+            new String [] {
+                "id", "nama"
+            }
+        ));
     }
 
     /**
@@ -55,7 +112,7 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
         btnUpdateDokter = new javax.swing.JButton();
         pnlSuster = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblDokter1 = new javax.swing.JTable();
+        tblSuster = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         edtKtpSuster = new javax.swing.JTextField();
@@ -73,7 +130,7 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
         btnUpdateSuster = new javax.swing.JButton();
         pnlStaff = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        tblDokter2 = new javax.swing.JTable();
+        tblStaff = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         edtKtpStaff = new javax.swing.JTextField();
@@ -91,11 +148,11 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
         btnUpdateStaff = new javax.swing.JButton();
         pnlSupplier = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        tblDokter3 = new javax.swing.JTable();
+        tblSupplier = new javax.swing.JTable();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        btnIdSupplier = new javax.swing.JTextField();
-        btnNamaSupplier = new javax.swing.JTextField();
+        edtIdSupplier = new javax.swing.JTextField();
+        edtNamaSupplier = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         btnTambahSupplier = new javax.swing.JButton();
         btnDeleteSupplier = new javax.swing.JButton();
@@ -183,6 +240,11 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblDokter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDokterMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDokter);
         if (tblDokter.getColumnModel().getColumnCount() > 0) {
             tblDokter.getColumnModel().getColumn(2).setHeaderValue("alamat");
@@ -224,19 +286,34 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
         pnlDokter.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, 20));
 
         btnTambahDokter.setText("Tambah");
+        btnTambahDokter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahDokterActionPerformed(evt);
+            }
+        });
         pnlDokter.add(btnTambahDokter, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, -1, -1));
 
         btnDeleteDokter.setText("Delete");
+        btnDeleteDokter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteDokterActionPerformed(evt);
+            }
+        });
         pnlDokter.add(btnDeleteDokter, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 410, -1, -1));
 
         btnUpdateDokter.setText("Update");
+        btnUpdateDokter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateDokterActionPerformed(evt);
+            }
+        });
         pnlDokter.add(btnUpdateDokter, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 410, -1, -1));
 
         mainPanel.add(pnlDokter, "cardDokter");
 
         pnlSuster.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tblDokter1.setModel(new javax.swing.table.DefaultTableModel(
+        tblSuster.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -262,11 +339,16 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(tblDokter1);
-        if (tblDokter1.getColumnModel().getColumnCount() > 0) {
-            tblDokter1.getColumnModel().getColumn(2).setHeaderValue("alamat");
-            tblDokter1.getColumnModel().getColumn(3).setHeaderValue("hp");
-            tblDokter1.getColumnModel().getColumn(4).setHeaderValue("kelamin");
+        tblSuster.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSusterMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblSuster);
+        if (tblSuster.getColumnModel().getColumnCount() > 0) {
+            tblSuster.getColumnModel().getColumn(2).setHeaderValue("alamat");
+            tblSuster.getColumnModel().getColumn(3).setHeaderValue("hp");
+            tblSuster.getColumnModel().getColumn(4).setHeaderValue("kelamin");
         }
 
         pnlSuster.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 730, 140));
@@ -303,19 +385,34 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
         pnlSuster.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, 20));
 
         btnTambahSuster.setText("Tambah");
+        btnTambahSuster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahSusterActionPerformed(evt);
+            }
+        });
         pnlSuster.add(btnTambahSuster, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, -1, -1));
 
         btnDeleteSuster.setText("Delete");
+        btnDeleteSuster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteSusterActionPerformed(evt);
+            }
+        });
         pnlSuster.add(btnDeleteSuster, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 410, -1, -1));
 
         btnUpdateSuster.setText("Update");
+        btnUpdateSuster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateSusterActionPerformed(evt);
+            }
+        });
         pnlSuster.add(btnUpdateSuster, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 410, -1, -1));
 
         mainPanel.add(pnlSuster, "cardSuster");
 
         pnlStaff.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tblDokter2.setModel(new javax.swing.table.DefaultTableModel(
+        tblStaff.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -341,11 +438,16 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane5.setViewportView(tblDokter2);
-        if (tblDokter2.getColumnModel().getColumnCount() > 0) {
-            tblDokter2.getColumnModel().getColumn(2).setHeaderValue("alamat");
-            tblDokter2.getColumnModel().getColumn(3).setHeaderValue("hp");
-            tblDokter2.getColumnModel().getColumn(4).setHeaderValue("kelamin");
+        tblStaff.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblStaffMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(tblStaff);
+        if (tblStaff.getColumnModel().getColumnCount() > 0) {
+            tblStaff.getColumnModel().getColumn(2).setHeaderValue("alamat");
+            tblStaff.getColumnModel().getColumn(3).setHeaderValue("hp");
+            tblStaff.getColumnModel().getColumn(4).setHeaderValue("kelamin");
         }
 
         pnlStaff.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 730, 140));
@@ -382,19 +484,34 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
         pnlStaff.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, 20));
 
         btnTambahStaff.setText("Tambah");
+        btnTambahStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahStaffActionPerformed(evt);
+            }
+        });
         pnlStaff.add(btnTambahStaff, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, -1, -1));
 
         btnDeleteStaff.setText("Delete");
+        btnDeleteStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteStaffActionPerformed(evt);
+            }
+        });
         pnlStaff.add(btnDeleteStaff, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 410, -1, -1));
 
         btnUpdateStaff.setText("Update");
+        btnUpdateStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateStaffActionPerformed(evt);
+            }
+        });
         pnlStaff.add(btnUpdateStaff, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 410, -1, -1));
 
         mainPanel.add(pnlStaff, "cardStaff");
 
         pnlSupplier.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tblDokter3.setModel(new javax.swing.table.DefaultTableModel(
+        tblSupplier.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -420,7 +537,12 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane7.setViewportView(tblDokter3);
+        tblSupplier.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSupplierMouseClicked(evt);
+            }
+        });
+        jScrollPane7.setViewportView(tblSupplier);
 
         pnlSupplier.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 730, 140));
 
@@ -430,19 +552,34 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
 
         jLabel20.setText("ID");
         pnlSupplier.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
-        pnlSupplier.add(btnIdSupplier, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 200, -1));
-        pnlSupplier.add(btnNamaSupplier, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, 200, -1));
+        pnlSupplier.add(edtIdSupplier, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 200, -1));
+        pnlSupplier.add(edtNamaSupplier, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, 200, -1));
 
         jLabel21.setText("Nama");
         pnlSupplier.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
 
         btnTambahSupplier.setText("Tambah");
+        btnTambahSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahSupplierActionPerformed(evt);
+            }
+        });
         pnlSupplier.add(btnTambahSupplier, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, -1, -1));
 
         btnDeleteSupplier.setText("Delete");
+        btnDeleteSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteSupplierActionPerformed(evt);
+            }
+        });
         pnlSupplier.add(btnDeleteSupplier, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 270, -1, -1));
 
         btnUpdateSupplier.setText("Update");
+        btnUpdateSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateSupplierActionPerformed(evt);
+            }
+        });
         pnlSupplier.add(btnUpdateSupplier, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
 
         mainPanel.add(pnlSupplier, "cardSupplier");
@@ -484,6 +621,250 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
         cl = (CardLayout) mainPanel.getLayout();
         cl.show(mainPanel, "cardSupplier");
     }//GEN-LAST:event_btnSupplierActionPerformed
+
+    private void tblDokterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDokterMouseClicked
+        int row = tblDokter.getSelectedRow();
+        String ktp = tblDokter.getValueAt(row, 0).toString();
+        String nama = tblDokter.getValueAt(row, 1).toString();
+        String alamat = tblDokter.getValueAt(row, 2).toString();
+        String hp = tblDokter.getValueAt(row, 3).toString();
+        String kelamin = tblDokter.getValueAt(row, 4).toString();
+        
+        edtKtpDokter.setText(ktp);
+        edtNamaDokter.setText(nama);
+        edtAlamatDokter.setText(alamat);
+        edtHpDokter.setText(hp);
+        edtKelaminDokter.setSelectedItem(kelamin);
+    }//GEN-LAST:event_tblDokterMouseClicked
+
+    private void tblSusterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSusterMouseClicked
+        int row = tblSuster.getSelectedRow();
+        String ktp = tblSuster.getValueAt(row, 0).toString();
+        String nama = tblSuster.getValueAt(row, 1).toString();
+        String alamat = tblSuster.getValueAt(row, 2).toString();
+        String hp = tblSuster.getValueAt(row, 3).toString();
+        String kelamin = tblSuster.getValueAt(row, 4).toString();
+        
+        edtKtpSuster.setText(ktp);
+        edtNamaSuster.setText(nama);
+        edtAlamatSuster.setText(alamat);
+        edtHpSuster.setText(hp);
+        edtKelaminSuster.setSelectedItem(kelamin);
+    }//GEN-LAST:event_tblSusterMouseClicked
+
+    private void tblStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStaffMouseClicked
+        int row = tblStaff.getSelectedRow();
+        String ktp = tblStaff.getValueAt(row, 0).toString();
+        String nama = tblStaff.getValueAt(row, 1).toString();
+        String alamat = tblStaff.getValueAt(row, 2).toString();
+        String hp = tblStaff.getValueAt(row, 3).toString();
+        String kelamin = tblStaff.getValueAt(row, 4).toString();
+        
+        edtKtpStaff.setText(ktp);
+        edtNamaStaff.setText(nama);
+        edtAlamatStaff.setText(alamat);
+        edtHpStaff.setText(hp);
+        edtKelaminStaff.setSelectedItem(kelamin);
+    }//GEN-LAST:event_tblStaffMouseClicked
+
+    private void btnTambahStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahStaffActionPerformed
+        String ktp = edtKtpStaff.getText();
+        String nama = edtNamaStaff.getText();
+        String alamat = edtAlamatStaff.getText();
+        String hp = edtHpStaff.getText();
+        String kelamin = edtKelaminStaff.getModel().getSelectedItem().toString();
+        
+        Staff staff = new Staff(ktp, nama, alamat, hp, kelamin);
+        Exec.ExecuteStaff eStaff = new Exec.ExecuteStaff();
+        int result = eStaff.insertStaff(staff);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah staff berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataStaff();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah staff gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTambahStaffActionPerformed
+
+    private void btnUpdateStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStaffActionPerformed
+        String ktp = edtKtpStaff.getText();
+        String nama = edtNamaStaff.getText();
+        String alamat = edtAlamatStaff.getText();
+        String hp = edtHpStaff.getText();
+        String kelamin = edtKelaminStaff.getModel().getSelectedItem().toString();
+        
+        Staff staff = new Staff(ktp, nama, alamat, hp, kelamin);
+        Exec.ExecuteStaff eStaff = new Exec.ExecuteStaff();
+        int result = eStaff.updateStaff(staff);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Update staff berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataStaff();
+        } else {
+            JOptionPane.showMessageDialog(this, "Update staff gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateStaffActionPerformed
+
+    private void btnDeleteStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteStaffActionPerformed
+        String ktp = edtKtpStaff.getText();
+        
+        Exec.ExecuteStaff eStaff = new Exec.ExecuteStaff();
+        int result = eStaff.deleteStaff(ktp);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Hapus staff berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataStaff();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus staff gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteStaffActionPerformed
+
+    private void btnTambahDokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahDokterActionPerformed
+        String ktp = edtKtpDokter.getText();
+        String nama = edtNamaDokter.getText();
+        String alamat = edtAlamatDokter.getText();
+        String hp = edtHpDokter.getText();
+        String kelamin = edtKelaminDokter.getModel().getSelectedItem().toString();
+        
+        Dokter dokter = new Dokter(ktp, nama, alamat, hp, kelamin);
+        Exec.ExecuteDokter eDokter = new Exec.ExecuteDokter();
+        int result = eDokter.insertDokter(dokter);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah dokter berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataDokter();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah dokter gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTambahDokterActionPerformed
+
+    private void btnUpdateDokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateDokterActionPerformed
+        String ktp = edtKtpDokter.getText();
+        String nama = edtNamaDokter.getText();
+        String alamat = edtAlamatDokter.getText();
+        String hp = edtHpDokter.getText();
+        String kelamin = edtKelaminDokter.getModel().getSelectedItem().toString();
+        
+        Dokter dokter = new Dokter(ktp, nama, alamat, hp, kelamin);
+        Exec.ExecuteDokter eDokter = new Exec.ExecuteDokter();
+        int result = eDokter.updateDokter(dokter);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Update dokter berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataDokter();
+        } else {
+            JOptionPane.showMessageDialog(this, "Update dokter gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateDokterActionPerformed
+
+    private void btnDeleteDokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteDokterActionPerformed
+        String ktp = edtKtpDokter.getText();
+        
+        Exec.ExecuteDokter eDokter = new Exec.ExecuteDokter();
+        int result = eDokter.deleteDokter(ktp);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Hapus dokter berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataDokter();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus dokter gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteDokterActionPerformed
+
+    private void btnTambahSusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahSusterActionPerformed
+        String ktp = edtKtpSuster.getText();
+        String nama = edtNamaSuster.getText();
+        String alamat = edtAlamatSuster.getText();
+        String hp = edtHpSuster.getText();
+        String kelamin = edtKelaminSuster.getModel().getSelectedItem().toString();
+        
+        Suster suster = new Suster(ktp, nama, alamat, hp, kelamin);
+        Exec.ExecuteSuster eSuster = new Exec.ExecuteSuster();
+        int result = eSuster.insertSuster(suster);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah suster berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataSuster();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah suster gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTambahSusterActionPerformed
+
+    private void btnUpdateSusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSusterActionPerformed
+        String ktp = edtKtpSuster.getText();
+        String nama = edtNamaSuster.getText();
+        String alamat = edtAlamatSuster.getText();
+        String hp = edtHpSuster.getText();
+        String kelamin = edtKelaminSuster.getModel().getSelectedItem().toString();
+        
+        Suster suster = new Suster(ktp, nama, alamat, hp, kelamin);
+        Exec.ExecuteSuster eSuster = new Exec.ExecuteSuster();
+        int result = eSuster.updateSuster(suster);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Update suster berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataSuster();
+        } else {
+            JOptionPane.showMessageDialog(this, "Update suster gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateSusterActionPerformed
+
+    private void btnDeleteSusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSusterActionPerformed
+        String ktp = edtKtpSuster.getText();
+        
+        Exec.ExecuteSuster eSuster = new Exec.ExecuteSuster();
+        int result = eSuster.deleteSuster(ktp);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Hapus suster berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataSuster();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus suster gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteSusterActionPerformed
+
+    private void tblSupplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSupplierMouseClicked
+        int row = tblSupplier.getSelectedRow();
+        String ktp = tblSupplier.getValueAt(row, 0).toString();
+        String nama = tblSupplier.getValueAt(row, 1).toString();
+        
+        edtIdSupplier.setText(ktp);
+        edtNamaSupplier.setText(nama);
+    }//GEN-LAST:event_tblSupplierMouseClicked
+
+    private void btnTambahSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahSupplierActionPerformed
+        String ktp = edtIdSupplier.getText();
+        String nama = edtNamaSupplier.getText();
+        
+        Supplier supp = new Supplier(ktp, nama);
+        Exec.ExecuteSupplier eS = new Exec.ExecuteSupplier();
+        int result = eS.insertSupplier(supp);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah Supplier berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataSupplier();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah Supplier gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTambahSupplierActionPerformed
+
+    private void btnUpdateSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSupplierActionPerformed
+        String ktp = edtIdSupplier.getText();
+        String nama = edtNamaSupplier.getText();
+        
+        Supplier supp = new Supplier(ktp, nama);
+        Exec.ExecuteSupplier eS = new Exec.ExecuteSupplier();
+        int result = eS.updateSupplier(supp);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Update Supplier berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataSupplier();
+        } else {
+            JOptionPane.showMessageDialog(this, "Update Supplier gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateSupplierActionPerformed
+
+    private void btnDeleteSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSupplierActionPerformed
+        String ktp = edtIdSupplier.getText();
+        
+        Exec.ExecuteSupplier eS = new Exec.ExecuteSupplier();
+        int result = eS.deleteSupplier(ktp);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Delete Supplier berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataSupplier();
+        } else {
+            JOptionPane.showMessageDialog(this, "Delete Supplier gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteSupplierActionPerformed
 
     /**
      * @param args the command line arguments
@@ -527,8 +908,6 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnDeleteSupplier;
     private javax.swing.JButton btnDeleteSuster;
     private javax.swing.JButton btnDokter;
-    private javax.swing.JTextField btnIdSupplier;
-    private javax.swing.JTextField btnNamaSupplier;
     private javax.swing.JButton btnStaff;
     private javax.swing.JButton btnSupplier;
     private javax.swing.JButton btnSuster;
@@ -546,6 +925,7 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
     private javax.swing.JTextField edtHpDokter;
     private javax.swing.JTextField edtHpStaff;
     private javax.swing.JTextField edtHpSuster;
+    private javax.swing.JTextField edtIdSupplier;
     private javax.swing.JComboBox edtKelaminDokter;
     private javax.swing.JComboBox edtKelaminStaff;
     private javax.swing.JComboBox edtKelaminSuster;
@@ -554,6 +934,7 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
     private javax.swing.JTextField edtKtpSuster;
     private javax.swing.JTextField edtNamaDokter;
     private javax.swing.JTextField edtNamaStaff;
+    private javax.swing.JTextField edtNamaSupplier;
     private javax.swing.JTextField edtNamaSuster;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -590,8 +971,8 @@ public class TambahPegawaiGUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnlSupplier;
     private javax.swing.JPanel pnlSuster;
     private javax.swing.JTable tblDokter;
-    private javax.swing.JTable tblDokter1;
-    private javax.swing.JTable tblDokter2;
-    private javax.swing.JTable tblDokter3;
+    private javax.swing.JTable tblStaff;
+    private javax.swing.JTable tblSupplier;
+    private javax.swing.JTable tblSuster;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,6 +5,12 @@
  */
 package GUI;
 
+import Connection.ConnectionManager;
+import com.mysql.jdbc.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /**
  *
  * @author 48faraaz
@@ -16,6 +22,38 @@ public class RadiologiGUI extends javax.swing.JFrame {
      */
     public RadiologiGUI() {
         initComponents();
+        getPasienListToComboBox();
+        getDokterListToComboBox();
+    }
+    
+    private void getPasienListToComboBox() {
+        String query = "select ktp from pasien";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()) {
+                boxPasianMain.addItem(rs.getString("ktp"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void getDokterListToComboBox() {
+        String query = "select ktp from dokter";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()) {
+                boxDosenMain.addItem(rs.getString("ktp"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -29,9 +67,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         edtTotalMain = new javax.swing.JTextField();
-        edtKeteranganMain = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         boxPasianMain = new javax.swing.JComboBox();
@@ -54,30 +90,36 @@ public class RadiologiGUI extends javax.swing.JFrame {
         edtCatatanMain = new javax.swing.JTextArea();
         jLabel12 = new javax.swing.JLabel();
         edtTanggal = new com.toedter.calendar.JDateChooser();
+        btnSimpanMain1 = new javax.swing.JButton();
+        btnSimpanMain2 = new javax.swing.JButton();
+        btnSimpanMain3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Tanggal");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 60, -1, -1));
 
         jLabel2.setText("No. Bukti");
-
-        jLabel3.setText("Keterangan");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 89, -1, -1));
 
         edtTotalMain.setName("EdtBukti"); // NOI18N
-
-        edtKeteranganMain.setName("EdtKeterangan"); // NOI18N
+        getContentPane().add(edtTotalMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 420, 120, -1));
 
         jLabel4.setText("Pasien");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(282, 54, -1, -1));
 
         jLabel5.setText("Pemeriksa");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(282, 86, -1, -1));
 
-        boxPasianMain.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         boxPasianMain.setName("ComboPasien"); // NOI18N
+        getContentPane().add(boxPasianMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 48, 215, -1));
 
-        boxDosenMain.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         boxDosenMain.setName("ComboPemeriksa"); // NOI18N
+        getContentPane().add(boxDosenMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 83, 215, -1));
 
         jLabel6.setText("Pemeriksaan");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
         tablePemeriksaanMain.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -101,7 +143,10 @@ public class RadiologiGUI extends javax.swing.JFrame {
         tablePemeriksaanMain.setName("TblPemeriksaan"); // NOI18N
         jScrollPane1.setViewportView(tablePemeriksaanMain);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 573, 105));
+
         jLabel7.setText("Film Radiologi");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
 
         tableFilmMain.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -125,155 +170,60 @@ public class RadiologiGUI extends javax.swing.JFrame {
         tableFilmMain.setName("TblRadiologi"); // NOI18N
         jScrollPane2.setViewportView(tableFilmMain);
 
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 573, 105));
+
         jLabel8.setText("Total Film");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 420, -1, -1));
 
         jLabel9.setText("Biaya");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 450, -1, -1));
 
+        edtNoBuktiMain.setText("otomatis");
+        edtNoBuktiMain.setEnabled(false);
         edtNoBuktiMain.setName("EdtBukti"); // NOI18N
+        getContentPane().add(edtNoBuktiMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 83, 181, -1));
 
         jLabel10.setText("lembar");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 420, -1, -1));
 
         edtBiayaMain.setName("EdtBukti"); // NOI18N
+        getContentPane().add(edtBiayaMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 450, 172, -1));
 
         btnSimpanMain.setText("Simpan");
         btnSimpanMain.setName("BtnSimpan"); // NOI18N
+        getContentPane().add(btnSimpanMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 480, -1, -1));
 
-        btnTutupMain.setText("Tutup");
+        btnTutupMain.setText("Reset");
         btnTutupMain.setName("BtnTutup"); // NOI18N
+        getContentPane().add(btnTutupMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 480, -1, -1));
 
         jLabel11.setText("Catatan Dokter");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, -1, -1));
 
         edtCatatanMain.setColumns(20);
         edtCatatanMain.setRows(5);
         jScrollPane3.setViewportView(edtCatatanMain);
 
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 308, 90));
+
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel12.setText("Radiologi Rs. Kasih Sayang Wibu");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 13, -1, -1));
 
         edtTanggal.setDateFormatString("yyyy-MM-dd");
+        getContentPane().add(edtTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 54, 181, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(boxDosenMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(boxPasianMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane3))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(edtTotalMain, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel10))
-                                    .addComponent(edtBiayaMain, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnSimpanMain)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnTutupMain))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(edtNoBuktiMain, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(edtTanggal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel4)))
-                                    .addComponent(edtKeteranganMain, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel12)
-                .addGap(168, 168, 168))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel12)
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(boxPasianMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(boxDosenMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(edtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(edtNoBuktiMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(edtKeteranganMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(edtBiayaMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSimpanMain)
-                            .addComponent(btnTutupMain)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(edtTotalMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(52, Short.MAX_VALUE))
-        );
+        btnSimpanMain1.setText("Delete");
+        btnSimpanMain1.setName("BtnSimpan"); // NOI18N
+        getContentPane().add(btnSimpanMain1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 120, -1, -1));
+
+        btnSimpanMain2.setText("Tambah");
+        btnSimpanMain2.setName("BtnSimpan"); // NOI18N
+        getContentPane().add(btnSimpanMain2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, -1, -1));
+
+        btnSimpanMain3.setText("Update");
+        btnSimpanMain3.setName("BtnSimpan"); // NOI18N
+        getContentPane().add(btnSimpanMain3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -324,10 +274,12 @@ public class RadiologiGUI extends javax.swing.JFrame {
     private javax.swing.JComboBox boxDosenMain;
     private javax.swing.JComboBox boxPasianMain;
     private javax.swing.JButton btnSimpanMain;
+    private javax.swing.JButton btnSimpanMain1;
+    private javax.swing.JButton btnSimpanMain2;
+    private javax.swing.JButton btnSimpanMain3;
     private javax.swing.JButton btnTutupMain;
     private javax.swing.JTextField edtBiayaMain;
     private javax.swing.JTextArea edtCatatanMain;
-    private javax.swing.JTextField edtKeteranganMain;
     private javax.swing.JTextField edtNoBuktiMain;
     private com.toedter.calendar.JDateChooser edtTanggal;
     private javax.swing.JTextField edtTotalMain;
@@ -336,7 +288,6 @@ public class RadiologiGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

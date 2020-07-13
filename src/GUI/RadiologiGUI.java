@@ -142,6 +142,38 @@ public class RadiologiGUI extends javax.swing.JFrame {
             }
         ));
     }
+    
+    private void hitungHargaDanLembar(String idRadiologi) {
+        int harga = 0;
+        int lembar = 0;
+        String query = "SELECT a.id, a.id_inventory, a.kuantitas, b.harga, (a.kuantitas * b.harga) AS total FROM inventoryradiologi a INNER JOIN inventory b ON a.id_inventory = b.id WHERE a.id_radiologi='"+idRadiologi+"'";
+        ConnectionManager conMan = new ConnectionManager();
+        java.sql.Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()) {
+                lembar += rs.getInt("kuantitas");
+                harga += rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            
+        }
+        
+        String query2 = "SELECT a.id, a.id_scan, b.harga FROM scanradiologi a INNER JOIN scan b ON a.id_scan = b.id WHERE a.id_radiologi='"+idRadiologi+"'";
+        try {
+            Statement stms = conn.createStatement();
+            ResultSet rss = stms.executeQuery(query2);
+            while(rss.next()) {
+                harga += rss.getInt("harga");
+            }
+        } catch (SQLException ex) {
+            
+        }
+        
+        edtBiayaMain.setText(String.valueOf(harga));
+        edtTotalMain.setText(String.valueOf(lembar));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -200,39 +232,29 @@ public class RadiologiGUI extends javax.swing.JFrame {
         btnBaruRadiologi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Tanggal");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
         jLabel2.setText("No. Bukti");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
         edtTotalMain.setEnabled(false);
         edtTotalMain.setName("EdtBukti"); // NOI18N
-        getContentPane().add(edtTotalMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 420, 120, -1));
 
         edtNoBuktiMain.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 edtNoBuktiMainItemStateChanged(evt);
             }
         });
-        getContentPane().add(edtNoBuktiMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 110, -1));
 
         jLabel4.setText("Pasien");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 50, -1, -1));
 
         jLabel5.setText("Pemeriksa");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, -1, -1));
 
         boxPasianMain.setName("ComboPasien"); // NOI18N
-        getContentPane().add(boxPasianMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 50, 215, -1));
 
         boxDokterMain.setName("ComboPemeriksa"); // NOI18N
-        getContentPane().add(boxDokterMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 215, -1));
 
         jLabel6.setText("Pemeriksaan");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
         tablePemeriksaanMain.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -268,10 +290,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablePemeriksaanMain);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 573, 105));
-
         jLabel7.setText("Film Radiologi");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
 
         tableFilmMain.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -307,44 +326,31 @@ public class RadiologiGUI extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tableFilmMain);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 573, 105));
-
         jLabel8.setText("Total Film");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 420, -1, -1));
 
         jLabel9.setText("Biaya");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 450, -1, -1));
 
         jLabel10.setText("lembar");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 420, -1, -1));
 
         edtBiayaMain.setEnabled(false);
         edtBiayaMain.setName("EdtBukti"); // NOI18N
-        getContentPane().add(edtBiayaMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 450, 172, -1));
 
         btnSimpanMain.setText("Simpan");
         btnSimpanMain.setName("BtnSimpan"); // NOI18N
-        getContentPane().add(btnSimpanMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 480, -1, -1));
 
         btnTutupMain.setText("Reset");
         btnTutupMain.setName("BtnTutup"); // NOI18N
-        getContentPane().add(btnTutupMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 480, -1, -1));
 
         jLabel11.setText("Catatan Dokter");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, -1, -1));
 
         edtCatatanMain.setColumns(20);
         edtCatatanMain.setRows(5);
         jScrollPane3.setViewportView(edtCatatanMain);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 308, 90));
-
         edtTanggal.setDateFormatString("yyyy-MM-dd");
-        getContentPane().add(edtTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 181, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel13.setText("Radiologi Rs. Kasih Sayang Wibu");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, -1));
 
         pnlPemeriksaan1.setBorder(javax.swing.BorderFactory.createTitledBorder("Jenis Film Radiologi"));
         pnlPemeriksaan1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -393,8 +399,6 @@ public class RadiologiGUI extends javax.swing.JFrame {
         jLabel18.setText("Qty");
         pnlPemeriksaan1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
-        getContentPane().add(pnlPemeriksaan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 270, 330, 200));
-
         pnlPemeriksaan.setBorder(javax.swing.BorderFactory.createTitledBorder("Jenis Pemeriksaan"));
         pnlPemeriksaan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -438,15 +442,126 @@ public class RadiologiGUI extends javax.swing.JFrame {
         jLabel14.setText("Tarif");
         pnlPemeriksaan.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
-        getContentPane().add(pnlPemeriksaan, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 70, 330, 170));
-
         btnBaruRadiologi.setText("Baru");
         btnBaruRadiologi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBaruRadiologiActionPerformed(evt);
             }
         });
-        getContentPane().add(btnBaruRadiologi, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, -1, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(330, 330, 330)
+                .addComponent(jLabel13))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(34, 34, 34)
+                        .addComponent(edtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel4)
+                        .addGap(33, 33, 33)
+                        .addComponent(boxPasianMain, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(30, 30, 30)
+                        .addComponent(edtNoBuktiMain, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnBaruRadiologi)
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel5)
+                        .addGap(11, 11, 11)
+                        .addComponent(boxDokterMain, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel6)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addComponent(pnlPemeriksaan, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(245, 245, 245)
+                        .addComponent(jLabel8)
+                        .addGap(13, 13, 13)
+                        .addComponent(edtTotalMain, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel10))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(40, 40, 40)
+                                .addComponent(edtBiayaMain, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnSimpanMain)
+                                .addGap(15, 15, 15)
+                                .addComponent(btnTutupMain)))))
+                .addGap(7, 7, 7)
+                .addComponent(pnlPemeriksaan1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel13)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(edtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(boxPasianMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(edtNoBuktiMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBaruRadiologi)
+                            .addComponent(jLabel5)
+                            .addComponent(boxDokterMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel6)
+                        .addGap(14, 14, 14)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(pnlPemeriksaan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(14, 14, 14)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel8)
+                            .addComponent(edtTotalMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addGap(8, 8, 8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(edtBiayaMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(8, 8, 8)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnSimpanMain)
+                                    .addComponent(btnTutupMain)))))
+                    .addComponent(pnlPemeriksaan1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -488,6 +603,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
             
             boxPasianMain.setSelectedItem(radiologi.getPasien().getKtp());
             boxDokterMain.setSelectedItem(radiologi.getDokter().getKtp());
+            edtCatatanMain.setText(String.valueOf(radiologi.getKeterangan()));
             
             try {
                 Date date = ft.parse(radiologi.getDate());
@@ -498,6 +614,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
             
             setDataPemeriksaan(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
             setDataFilm(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+            hitungHargaDanLembar(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
             
             btnTambahPemeriksaan.setEnabled(true);
             btnDeletePemeriksaan.setEnabled(true);
@@ -561,6 +678,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
         if(result == 1) {
             JOptionPane.showMessageDialog(this, "Tambah scan radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
             setDataPemeriksaan(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+            hitungHargaDanLembar(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
         } else {
             JOptionPane.showMessageDialog(this, "Tambah scan radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
         }
@@ -583,6 +701,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
         if(result == 1) {
             JOptionPane.showMessageDialog(this, "Hapus scan radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
             setDataPemeriksaan(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+            hitungHargaDanLembar(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
         } else {
             JOptionPane.showMessageDialog(this, "Hapus scan radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
         }
@@ -598,6 +717,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
         if(result == 1) {
             JOptionPane.showMessageDialog(this, "Tambah film radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
             setDataFilm(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+            hitungHargaDanLembar(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
         } else {
             JOptionPane.showMessageDialog(this, "Tambah film radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
         }
@@ -614,6 +734,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
         if(result == 1) {
             JOptionPane.showMessageDialog(this, "Hapus film radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
             setDataFilm(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+            hitungHargaDanLembar(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
         } else {
             JOptionPane.showMessageDialog(this, "Hapus film radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
         }

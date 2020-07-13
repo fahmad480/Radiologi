@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * @author 48faraaz
  */
 public class ExecuteRadiologi {
-    public List<Radiologi> getAllPs() {
+    public List<Radiologi> getAllRadiologi() {
         List<Radiologi> listPs = new ArrayList<>();
         String query = "SELECT * FROM radiologi";
         ConnectionManager conMan = new ConnectionManager();
@@ -119,6 +119,7 @@ public class ExecuteRadiologi {
                 radiologi.setPasien(pasien);
                 radiologi.setDokter(dokter);
                 radiologi.setDate(rs.getString("date"));
+                radiologi.setKeterangan(rs.getString("keterangan"));
             }
         } catch (SQLException ex) {
             //Logger.getLogger(ExecuteLogin.class.getName()).log(Level.SEVERE, null, ex);

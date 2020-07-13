@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/48far/Documents/NetBeansProjects/Radiologi/src/GUI/RadiologiGUI.java</file>
-            <file>file:/C:/Users/48far/Documents/NetBeansProjects/Radiologi/src/Converter/ConvertScanToObject.java</file>
-            <file>file:/C:/Users/48far/Documents/NetBeansProjects/Radiologi/src/Exec/ExecuteRadiologi.java</file>
-            <file>file:/C:/Users/48far/Documents/NetBeansProjects/Radiologi/src/Exec/ExecuteInventory.java</file>
-            <file>file:/C:/Users/48far/Documents/NetBeansProjects/Radiologi/src/Entity/Scan.java</file>
-            <file>file:/C:/Users/48far/Documents/NetBeansProjects/Radiologi/src/Exec/ExecuteScan.java</file>
+            <file>file:/D:/Ata/Semester%204/PBO/Project%20Radiologi/Radiologi/Radiologi/src/GUI/ReportGUI.java</file>
+            <file>file:/D:/Ata/Semester%204/PBO/Project%20Radiologi/Radiologi/Radiologi/src/GUI/MTGUI.java</file>
+            <file>file:/D:/Ata/Semester%204/PBO/Project%20Radiologi/Radiologi/Radiologi/src/Converter/ConvertDokterToObject.java</file>
+            <file>file:/D:/Ata/Semester%204/PBO/Project%20Radiologi/Radiologi/Radiologi/src/Converter/ConvertInventoryLogToObject.java</file>
         </group>
     </open-files>
 </project-private>

@@ -6,6 +6,11 @@
 package GUI;
 
 import Converter.ConvertRecordLogToObject;
+import java.awt.print.PrinterException;
+import java.text.MessageFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
 
 /**
  *
@@ -107,6 +112,11 @@ public class ReportGUI extends javax.swing.JFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(269, 48, -1, -1));
 
         btnPrintReport.setText("Print Record Radiologi");
+        btnPrintReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintReportActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnPrintReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(329, 214, -1, -1));
 
         edtStartDate.setDateFormatString("yyyy-MM-dd");
@@ -117,6 +127,14 @@ public class ReportGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnPrintReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintReportActionPerformed
+        try {
+            tabelReport.print(JTable.PrintMode.FIT_WIDTH,new MessageFormat("Report"),null);
+        }catch (PrinterException ex){
+            Logger.getLogger(ReportGUI.class.getName()).log(Level.SEVERE, null,ex);
+        }   
+    }//GEN-LAST:event_btnPrintReportActionPerformed
 
     /**
      * @param args the command line arguments

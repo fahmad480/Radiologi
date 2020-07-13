@@ -9,11 +9,17 @@ import Converter.ConvertMaintenanceToObject;
 import Converter.ConvertPasienToObject;
 import Entity.Maintenancelog;
 import Entity.Staff;
+import java.awt.print.PrinterException;
 import java.io.File;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.print.PrintException;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  *
@@ -321,9 +327,14 @@ public class MTGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        Exec.ExportToExcel export = new Exec.ExportToExcel();
-        File file = new File("maintenancereport.xlsx");
-        export.toExcel(tabelMaintenance, file);
+//        Exec.ExportToExcel export = new Exec.ExportToExcel();
+ //       File file = new File("maintenancereport.xlsx");
+  //      export.toExcel(tabelMaintenance, file);
+         try {
+            tabelMaintenance.print(JTable.PrintMode.FIT_WIDTH,new MessageFormat("Record Maintenance"),null);
+        }catch (PrinterException ex){
+            Logger.getLogger(MTGUI.class.getName()).log(Level.SEVERE, null,ex);
+        }
     }//GEN-LAST:event_btnPrintActionPerformed
 
     /**

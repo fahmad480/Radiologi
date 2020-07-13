@@ -9,6 +9,7 @@ import Converter.ConvertMaintenanceToObject;
 import Converter.ConvertPasienToObject;
 import Entity.Maintenancelog;
 import Entity.Staff;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -131,6 +132,11 @@ public class MTGUI extends javax.swing.JFrame {
         edtTanggal.setDateFormatString("yyyy-MM-dd");
 
         btnPrint.setText("Print All");
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -313,6 +319,12 @@ public class MTGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Hapus record maintenance gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        Exec.ExportToExcel export = new Exec.ExportToExcel();
+        File file = new File("maintenancereport.xlsx");
+        export.toExcel(tabelMaintenance, file);
+    }//GEN-LAST:event_btnPrintActionPerformed
 
     /**
      * @param args the command line arguments

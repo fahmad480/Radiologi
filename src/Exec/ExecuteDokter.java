@@ -91,24 +91,24 @@ public class ExecuteDokter {
     }
     
     public Dokter getRow(String ktp) {
-        Dokter suster = new Dokter();
-        String query = "SELECT * FROM suster WHERE ktp='"+ktp+"'";
+        Dokter dokter = new Dokter();
+        String query = "SELECT * FROM dokter WHERE ktp='"+ktp+"'";
         ConnectionManager conMan = new ConnectionManager();
         Connection conn = conMan.LogOn();
         try {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(query);
             if(rs.next()) {
-                suster.setKtp(rs.getString("ktp"));
-                suster.setNama(rs.getString("nama"));
-                suster.setHp(rs.getString("hp"));
-                suster.setAlamat(rs.getString("alamat"));
-                suster.setKelamin(rs.getString("kelamin"));
+                dokter.setKtp(rs.getString("ktp"));
+                dokter.setNama(rs.getString("nama"));
+                dokter.setHp(rs.getString("hp"));
+                dokter.setAlamat(rs.getString("alamat"));
+                dokter.setKelamin(rs.getString("kelamin"));
             }
         } catch (SQLException ex) {
             //Logger.getLogger(ExecuteDokter.class.getName()).log(Level.SEVERE, null, ex);
         }
         conMan.LogOff();
-        return suster;
+        return dokter;
     }
 }

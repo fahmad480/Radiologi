@@ -10,6 +10,8 @@ import Entity.Inventory;
 import Entity.Inventory;
 import Entity.Inventory;
 import Entity.Inventory;
+import Entity.Inventoryradiologi;
+import Entity.Radiologi;
 import Entity.Supplier;
 import Entity.Suster;
 import java.sql.Connection;
@@ -123,5 +125,67 @@ public class ExecuteInventory {
         }
         conMan.LogOff();
         return inventory;
+    }
+    
+    public List<Inventoryradiologi> getInventoryRadiologi(String idRadiologi) {
+        List<Inventoryradiologi> listInv = new ArrayList<>();
+        String query = "SELECT * FROM inventoryradiologi WHERE id_radiologi='"+idRadiologi+"'";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()) {
+                Inventoryradiologi inv = new Inventoryradiologi();
+                inv.setId(rs.getString("id"));
+                
+                Exec.ExecuteInventory eInv = new Exec.ExecuteInventory();
+                Inventory inventory = eInv.getRow(rs.getString("id_inventory"));
+                
+                Exec.ExecuteRadiologi eRad = new Exec.ExecuteRadiologi();
+                Radiologi rad = eRad.getRow(rs.getString("id_radiologi"));
+                
+                inv.setInventory(inventory);
+                inv.setRadiologi(rad);
+                inv.setKuantitas(rs.getInt("kuantitas"));
+                
+                listInv.add(inv);
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        conMan.LogOff();
+        return listInv;
+    }
+    
+    public int insertInventoryRadiologi(String inv, String radiologi, String qty) {
+        int hasil = 0;
+        String query = "INSERT INTO inventoryradiologi(id_inventory, id_radiologi, kuantitas) VALUES('"+inv+"','"+radiologi+"',"+qty+")";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            hasil = stm.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        conMan.LogOff();
+        return hasil;
+    }
+    
+    public int deleteInventoryRadiologi(String kode) {
+        int hasil = 0;
+        String query = "DELETE FROM inventoryradiologi WHERE id='"+kode+"'";
+        System.out.println(query);
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            hasil = stm.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        conMan.LogOff();
+        return hasil;
     }
 }

@@ -6,10 +6,22 @@
 package GUI;
 
 import Connection.ConnectionManager;
+import Converter.ConvertInventoryRadiologiToObject;
+import Converter.ConvertPasienToObject;
+import Converter.ConvertScanRadiologiToObject;
+import Entity.Dokter;
+import Entity.Inventory;
+import Entity.Pasien;
+import Entity.Radiologi;
+import Entity.Scan;
 import com.mysql.jdbc.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,6 +36,9 @@ public class RadiologiGUI extends javax.swing.JFrame {
         initComponents();
         getPasienListToComboBox();
         getDokterListToComboBox();
+        getPemeriksaanListToComboBox();
+        getFilmListToComboBox();
+        getRadiologiListToComboBox();
     }
     
     private void getPasienListToComboBox() {
@@ -33,6 +48,7 @@ public class RadiologiGUI extends javax.swing.JFrame {
         try {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(query);
+            boxPasianMain.addItem("");
             while(rs.next()) {
                 boxPasianMain.addItem(rs.getString("ktp"));
             }
@@ -48,12 +64,83 @@ public class RadiologiGUI extends javax.swing.JFrame {
         try {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(query);
+            boxDokterMain.addItem("");
             while(rs.next()) {
-                boxDosenMain.addItem(rs.getString("ktp"));
+                boxDokterMain.addItem(rs.getString("ktp"));
             }
         } catch (SQLException ex) {
             //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void getPemeriksaanListToComboBox() {
+        String query = "select id from scan";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()) {
+                edtKodePemeriksaan.addItem(rs.getString("id"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void getFilmListToComboBox() {
+        String query = "select id from inventory WHERE jenis='barang'";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()) {
+                edtKodeFilm.addItem(rs.getString("id"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void getRadiologiListToComboBox() {
+        String query = "select id from radiologi";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+            edtNoBuktiMain.removeItem("baru");
+            edtNoBuktiMain.addItem("baru");
+            while(rs.next()) {
+                edtNoBuktiMain.removeItem(rs.getString("id"));
+                edtNoBuktiMain.addItem(rs.getString("id"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(ExecuteInventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void setDataPemeriksaan(String idRadiologi) {
+        ConvertScanRadiologiToObject csrto = new ConvertScanRadiologiToObject();
+        String[][] dataScan = csrto.getScan(idRadiologi);
+        tablePemeriksaanMain.setModel(new javax.swing.table.DefaultTableModel(
+            dataScan,
+            new String [] {
+                "Kode", "kode scan", "Nama", "Tarif"
+            }
+        ));
+    }
+    
+    private void setDataFilm(String idRadiologi) {
+        ConvertInventoryRadiologiToObject cirto = new ConvertInventoryRadiologiToObject();
+        String[][] dataFilm = cirto.getInventoryradiologiAktif(idRadiologi);
+        tableFilmMain.setModel(new javax.swing.table.DefaultTableModel(
+            dataFilm,
+            new String [] {
+                "Kode", "Kode film", "Nama", "Satuan", "Kuantitas"
+            }
+        ));
     }
 
     /**
@@ -68,10 +155,11 @@ public class RadiologiGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         edtTotalMain = new javax.swing.JTextField();
+        edtNoBuktiMain = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         boxPasianMain = new javax.swing.JComboBox();
-        boxDosenMain = new javax.swing.JComboBox();
+        boxDokterMain = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablePemeriksaanMain = new javax.swing.JTable();
@@ -80,7 +168,6 @@ public class RadiologiGUI extends javax.swing.JFrame {
         tableFilmMain = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        edtNoBuktiMain = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         edtBiayaMain = new javax.swing.JTextField();
         btnSimpanMain = new javax.swing.JButton();
@@ -88,59 +175,97 @@ public class RadiologiGUI extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         edtCatatanMain = new javax.swing.JTextArea();
-        jLabel12 = new javax.swing.JLabel();
         edtTanggal = new com.toedter.calendar.JDateChooser();
-        btnSimpanMain1 = new javax.swing.JButton();
-        btnSimpanMain2 = new javax.swing.JButton();
-        btnSimpanMain3 = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        pnlPemeriksaan1 = new javax.swing.JPanel();
+        btnDeleteFilm = new javax.swing.JButton();
+        btnTambahFilm = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        edtNamaFilm = new javax.swing.JTextField();
+        edtKodeFilm = new javax.swing.JComboBox();
+        jLabel16 = new javax.swing.JLabel();
+        edtHargaFilm = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        edtQtyFilm = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        pnlPemeriksaan = new javax.swing.JPanel();
+        btnDeletePemeriksaan = new javax.swing.JButton();
+        btnTambahPemeriksaan = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        edtKodePemeriksaan = new javax.swing.JComboBox();
+        edtNamaPemeriksaan = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        edtTarifPemeriksaan = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        btnBaruRadiologi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Tanggal");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 60, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
         jLabel2.setText("No. Bukti");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 89, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
+        edtTotalMain.setEnabled(false);
         edtTotalMain.setName("EdtBukti"); // NOI18N
         getContentPane().add(edtTotalMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 420, 120, -1));
 
+        edtNoBuktiMain.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                edtNoBuktiMainItemStateChanged(evt);
+            }
+        });
+        getContentPane().add(edtNoBuktiMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 110, -1));
+
         jLabel4.setText("Pasien");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(282, 54, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 50, -1, -1));
 
         jLabel5.setText("Pemeriksa");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(282, 86, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, -1, -1));
 
         boxPasianMain.setName("ComboPasien"); // NOI18N
-        getContentPane().add(boxPasianMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 48, 215, -1));
+        getContentPane().add(boxPasianMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 50, 215, -1));
 
-        boxDosenMain.setName("ComboPemeriksa"); // NOI18N
-        getContentPane().add(boxDosenMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 83, 215, -1));
+        boxDokterMain.setName("ComboPemeriksa"); // NOI18N
+        getContentPane().add(boxDokterMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 215, -1));
 
         jLabel6.setText("Pemeriksaan");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
         tablePemeriksaanMain.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Kode", "Nama", "Tarif"
+                "Kode", "kode scan", "Nama", "Tarif"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         tablePemeriksaanMain.setName("TblPemeriksaan"); // NOI18N
+        tablePemeriksaanMain.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablePemeriksaanMainMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablePemeriksaanMain);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 573, 105));
@@ -150,24 +275,36 @@ public class RadiologiGUI extends javax.swing.JFrame {
 
         tableFilmMain.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Kode", "Nama", "Satuan", "Kuantitas"
+                "Kode", "kode film", "Nama", "Satuan", "Kuantitas"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         tableFilmMain.setName("TblRadiologi"); // NOI18N
+        tableFilmMain.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableFilmMainMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tableFilmMain);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 573, 105));
@@ -178,14 +315,10 @@ public class RadiologiGUI extends javax.swing.JFrame {
         jLabel9.setText("Biaya");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 450, -1, -1));
 
-        edtNoBuktiMain.setText("otomatis");
-        edtNoBuktiMain.setEnabled(false);
-        edtNoBuktiMain.setName("EdtBukti"); // NOI18N
-        getContentPane().add(edtNoBuktiMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 83, 181, -1));
-
         jLabel10.setText("lembar");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 420, -1, -1));
 
+        edtBiayaMain.setEnabled(false);
         edtBiayaMain.setName("EdtBukti"); // NOI18N
         getContentPane().add(edtBiayaMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 450, 172, -1));
 
@@ -206,27 +339,295 @@ public class RadiologiGUI extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 308, 90));
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel12.setText("Radiologi Rs. Kasih Sayang Wibu");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 13, -1, -1));
-
         edtTanggal.setDateFormatString("yyyy-MM-dd");
-        getContentPane().add(edtTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 54, 181, -1));
+        getContentPane().add(edtTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 181, -1));
 
-        btnSimpanMain1.setText("Delete");
-        btnSimpanMain1.setName("BtnSimpan"); // NOI18N
-        getContentPane().add(btnSimpanMain1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 120, -1, -1));
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel13.setText("Radiologi Rs. Kasih Sayang Wibu");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, -1));
 
-        btnSimpanMain2.setText("Tambah");
-        btnSimpanMain2.setName("BtnSimpan"); // NOI18N
-        getContentPane().add(btnSimpanMain2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, -1, -1));
+        pnlPemeriksaan1.setBorder(javax.swing.BorderFactory.createTitledBorder("Jenis Film Radiologi"));
+        pnlPemeriksaan1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnSimpanMain3.setText("Update");
-        btnSimpanMain3.setName("BtnSimpan"); // NOI18N
-        getContentPane().add(btnSimpanMain3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, -1, -1));
+        btnDeleteFilm.setText("Delete");
+        btnDeleteFilm.setName("BtnSimpan"); // NOI18N
+        btnDeleteFilm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteFilmActionPerformed(evt);
+            }
+        });
+        pnlPemeriksaan1.add(btnDeleteFilm, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, -1, -1));
+
+        btnTambahFilm.setText("Tambah");
+        btnTambahFilm.setName("BtnSimpan"); // NOI18N
+        btnTambahFilm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahFilmActionPerformed(evt);
+            }
+        });
+        pnlPemeriksaan1.add(btnTambahFilm, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 160, -1, -1));
+
+        jLabel15.setText("Kode");
+        pnlPemeriksaan1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+
+        edtNamaFilm.setEnabled(false);
+        pnlPemeriksaan1.add(edtNamaFilm, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 230, -1));
+
+        edtKodeFilm.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                edtKodeFilmItemStateChanged(evt);
+            }
+        });
+        pnlPemeriksaan1.add(edtKodeFilm, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 230, -1));
+
+        jLabel16.setText("Nama");
+        pnlPemeriksaan1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+
+        edtHargaFilm.setEnabled(false);
+        pnlPemeriksaan1.add(edtHargaFilm, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 230, -1));
+
+        jLabel17.setText("Harga/pc");
+        pnlPemeriksaan1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
+        pnlPemeriksaan1.add(edtQtyFilm, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 230, -1));
+
+        jLabel18.setText("Qty");
+        pnlPemeriksaan1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
+
+        getContentPane().add(pnlPemeriksaan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 270, 330, 200));
+
+        pnlPemeriksaan.setBorder(javax.swing.BorderFactory.createTitledBorder("Jenis Pemeriksaan"));
+        pnlPemeriksaan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnDeletePemeriksaan.setText("Delete");
+        btnDeletePemeriksaan.setName("BtnSimpan"); // NOI18N
+        btnDeletePemeriksaan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletePemeriksaanActionPerformed(evt);
+            }
+        });
+        pnlPemeriksaan.add(btnDeletePemeriksaan, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, -1, -1));
+
+        btnTambahPemeriksaan.setText("Tambah");
+        btnTambahPemeriksaan.setName("BtnSimpan"); // NOI18N
+        btnTambahPemeriksaan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahPemeriksaanActionPerformed(evt);
+            }
+        });
+        pnlPemeriksaan.add(btnTambahPemeriksaan, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, -1, -1));
+
+        jLabel3.setText("Kode");
+        pnlPemeriksaan.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+
+        edtKodePemeriksaan.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                edtKodePemeriksaanItemStateChanged(evt);
+            }
+        });
+        pnlPemeriksaan.add(edtKodePemeriksaan, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 230, -1));
+
+        edtNamaPemeriksaan.setEnabled(false);
+        pnlPemeriksaan.add(edtNamaPemeriksaan, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 230, -1));
+
+        jLabel12.setText("Nama");
+        pnlPemeriksaan.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+
+        edtTarifPemeriksaan.setEnabled(false);
+        pnlPemeriksaan.add(edtTarifPemeriksaan, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 230, -1));
+
+        jLabel14.setText("Tarif");
+        pnlPemeriksaan.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
+
+        getContentPane().add(pnlPemeriksaan, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 70, 330, 170));
+
+        btnBaruRadiologi.setText("Baru");
+        btnBaruRadiologi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBaruRadiologiActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBaruRadiologi, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void edtKodePemeriksaanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_edtKodePemeriksaanItemStateChanged
+        Exec.ExecuteScan eS = new Exec.ExecuteScan();
+        Scan sc = eS.getRow(String.valueOf(edtKodePemeriksaan.getModel().getSelectedItem()));
+        edtNamaPemeriksaan.setText(sc.getNama());
+        edtTarifPemeriksaan.setText(String.valueOf(sc.getHarga()));
+    }//GEN-LAST:event_edtKodePemeriksaanItemStateChanged
+
+    private void edtKodeFilmItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_edtKodeFilmItemStateChanged
+        Exec.ExecuteInventory eInv = new Exec.ExecuteInventory();
+        Inventory inv = eInv.getRow(String.valueOf(edtKodeFilm.getModel().getSelectedItem()));
+        edtNamaFilm.setText(inv.getNama());
+        edtHargaFilm.setText(String.valueOf(inv.getHarga()));
+    }//GEN-LAST:event_edtKodeFilmItemStateChanged
+
+    private void edtNoBuktiMainItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_edtNoBuktiMainItemStateChanged
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+        
+        if(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()).equals("baru")) {
+            btnBaruRadiologi.setEnabled(true);
+            btnBaruRadiologi.setText("Tambah");
+            Date date = new Date();
+            edtTanggal.setDate(date);
+            boxPasianMain.setSelectedItem("");
+            boxDokterMain.setSelectedItem("");
+            
+            btnTambahPemeriksaan.setEnabled(false);
+            btnDeletePemeriksaan.setEnabled(false);
+            btnTambahFilm.setEnabled(false);
+            btnDeleteFilm.setEnabled(false);
+        } else {
+            btnBaruRadiologi.setEnabled(true);
+            btnBaruRadiologi.setText("baru");
+            Exec.ExecuteRadiologi eRad = new Exec.ExecuteRadiologi();
+            Radiologi radiologi = eRad.getRow(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+            
+            boxPasianMain.setSelectedItem(radiologi.getPasien().getKtp());
+            boxDokterMain.setSelectedItem(radiologi.getDokter().getKtp());
+            
+            try {
+                Date date = ft.parse(radiologi.getDate());
+                edtTanggal.setDate(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            
+            setDataPemeriksaan(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+            setDataFilm(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+            
+            btnTambahPemeriksaan.setEnabled(true);
+            btnDeletePemeriksaan.setEnabled(true);
+            btnTambahFilm.setEnabled(true);
+            btnDeleteFilm.setEnabled(true);
+        }
+    }//GEN-LAST:event_edtNoBuktiMainItemStateChanged
+
+    private void btnBaruRadiologiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBaruRadiologiActionPerformed
+        if(btnBaruRadiologi.getText().equals("baru")) {
+            edtNoBuktiMain.setSelectedItem("baru");
+        } else if(btnBaruRadiologi.getText().equals("Tambah")) {
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog (null, "Apakah kamu yakin ingin membuat tindakan radiologi baru?","Tambah Radiologi Baru", dialogButton);
+            if(dialogResult == JOptionPane.YES_OPTION){
+                if(String.valueOf(boxPasianMain.getModel().getSelectedItem()).equals("")) {
+                    JOptionPane.showMessageDialog(this, "Pilih terlebih dahulu pasiennya!", "Gagal", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    if(String.valueOf(boxDokterMain.getModel().getSelectedItem()).equals("")) {
+                        JOptionPane.showMessageDialog(this, "Pilih terlebih dahulu dokter yang akan memeriksanya!", "Gagal", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        //add new radiologi
+                        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+                        
+                        String pasien = String.valueOf(boxPasianMain.getModel().getSelectedItem());
+                        
+                        Exec.ExecutePasien ePas = new Exec.ExecutePasien();
+                        Pasien pas = ePas.getRow(pasien);
+                        
+                        String dokter = String.valueOf(boxDokterMain.getModel().getSelectedItem());
+                        
+                        Exec.ExecuteDokter eDok = new Exec.ExecuteDokter();
+                        Dokter dok = eDok.getRow(dokter);
+                        
+                        String date = ft.format(edtTanggal.getDate());
+                        String keterangan = edtCatatanMain.getText();
+                        
+                        Radiologi rad = new Radiologi(pas, dok, date, keterangan);
+                        
+                        Exec.ExecuteRadiologi eRad = new Exec.ExecuteRadiologi();
+                        int result = eRad.insertRadiologi(rad);
+                        if(result == 1) {
+                            JOptionPane.showMessageDialog(this, "Tambah radiologi baru berhasil, silahkan ubah no bukti ke paling terbaru", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+                            getRadiologiListToComboBox();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Tambah radiologi baru gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+            }
+        }
+            
+    }//GEN-LAST:event_btnBaruRadiologiActionPerformed
+
+    private void btnTambahPemeriksaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPemeriksaanActionPerformed
+        String id_scan = String.valueOf(edtKodePemeriksaan.getModel().getSelectedItem());
+        String id_radiologi = String.valueOf(edtNoBuktiMain.getModel().getSelectedItem());
+        
+        Exec.ExecuteScan eScan = new Exec.ExecuteScan();
+        int result = eScan.insertScanRadiologi(id_scan, id_radiologi);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah scan radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataPemeriksaan(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah scan radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTambahPemeriksaanActionPerformed
+
+    private void tablePemeriksaanMainMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePemeriksaanMainMouseClicked
+        int row = tablePemeriksaanMain.getSelectedRow();
+        String id = tablePemeriksaanMain.getValueAt(row, 0).toString();
+        String id_scan = tablePemeriksaanMain.getValueAt(row, 1).toString();
+        
+        edtKodePemeriksaan.setSelectedItem(id_scan);
+    }//GEN-LAST:event_tablePemeriksaanMainMouseClicked
+
+    private void btnDeletePemeriksaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletePemeriksaanActionPerformed
+        int row = tablePemeriksaanMain.getSelectedRow();
+        String id = tablePemeriksaanMain.getValueAt(row, 0).toString();
+        
+        Exec.ExecuteScan eScan = new Exec.ExecuteScan();
+        int result = eScan.deleteScanRadiologi(id);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Hapus scan radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataPemeriksaan(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus scan radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeletePemeriksaanActionPerformed
+
+    private void btnTambahFilmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahFilmActionPerformed
+        String idInv = String.valueOf(edtKodeFilm.getModel().getSelectedItem());
+        String id_radiologi = String.valueOf(edtNoBuktiMain.getModel().getSelectedItem());
+        String qty = edtQtyFilm.getText();
+        
+        Exec.ExecuteInventory eInv = new Exec.ExecuteInventory();
+        int result = eInv.insertInventoryRadiologi(idInv, id_radiologi, qty);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Tambah film radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataFilm(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+        } else {
+            JOptionPane.showMessageDialog(this, "Tambah film radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTambahFilmActionPerformed
+
+    private void btnDeleteFilmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteFilmActionPerformed
+        int row = tableFilmMain.getSelectedRow();
+        String id = tableFilmMain.getValueAt(row, 0).toString();
+        String id_inv = tableFilmMain.getValueAt(row, 1).toString();
+        String qty = tableFilmMain.getValueAt(row, 4).toString();
+        
+        Exec.ExecuteInventory eInv = new Exec.ExecuteInventory();
+        int result = eInv.deleteInventoryRadiologi(id);
+        if(result == 1) {
+            JOptionPane.showMessageDialog(this, "Hapus film radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            setDataFilm(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+        } else {
+            JOptionPane.showMessageDialog(this, "Hapus film radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteFilmActionPerformed
+
+    private void tableFilmMainMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFilmMainMouseClicked
+        int row = tableFilmMain.getSelectedRow();
+        String id = tableFilmMain.getValueAt(row, 0).toString();
+        String id_inv = tableFilmMain.getValueAt(row, 1).toString();
+        String qty = tableFilmMain.getValueAt(row, 4).toString();
+        
+        edtKodeFilm.setSelectedItem(id_inv);
+        edtQtyFilm.setText(qty);
+    }//GEN-LAST:event_tableFilmMainMouseClicked
 
     /**
      * @param args the command line arguments
@@ -271,23 +672,39 @@ public class RadiologiGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox boxDosenMain;
+    private javax.swing.JComboBox boxDokterMain;
     private javax.swing.JComboBox boxPasianMain;
+    private javax.swing.JButton btnBaruRadiologi;
+    private javax.swing.JButton btnDeleteFilm;
+    private javax.swing.JButton btnDeletePemeriksaan;
     private javax.swing.JButton btnSimpanMain;
-    private javax.swing.JButton btnSimpanMain1;
-    private javax.swing.JButton btnSimpanMain2;
-    private javax.swing.JButton btnSimpanMain3;
+    private javax.swing.JButton btnTambahFilm;
+    private javax.swing.JButton btnTambahPemeriksaan;
     private javax.swing.JButton btnTutupMain;
     private javax.swing.JTextField edtBiayaMain;
     private javax.swing.JTextArea edtCatatanMain;
-    private javax.swing.JTextField edtNoBuktiMain;
+    private javax.swing.JTextField edtHargaFilm;
+    private javax.swing.JComboBox edtKodeFilm;
+    private javax.swing.JComboBox edtKodePemeriksaan;
+    private javax.swing.JTextField edtNamaFilm;
+    private javax.swing.JTextField edtNamaPemeriksaan;
+    private javax.swing.JComboBox edtNoBuktiMain;
+    private javax.swing.JTextField edtQtyFilm;
     private com.toedter.calendar.JDateChooser edtTanggal;
+    private javax.swing.JTextField edtTarifPemeriksaan;
     private javax.swing.JTextField edtTotalMain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -297,6 +714,8 @@ public class RadiologiGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JPanel pnlPemeriksaan;
+    private javax.swing.JPanel pnlPemeriksaan1;
     private javax.swing.JTable tableFilmMain;
     private javax.swing.JTable tablePemeriksaanMain;
     // End of variables declaration//GEN-END:variables

@@ -13,21 +13,19 @@ public class Scanradiologi {
     private String id;
     private Scan scan;
     private Radiologi radiologi;
-    private int kuantitas;
 
     public Scanradiologi() {
     }
 
-    public Scanradiologi(String id, Scan scan, Radiologi radiologi, int kuantitas) {
+    public Scanradiologi(String id, Scan scan, Radiologi radiologi) {
         this.id = id;
         this.scan = scan;
         this.radiologi = radiologi;
-        this.kuantitas = kuantitas;
     }
 
     @Override
     public String toString() {
-        return "Scanradiologi{" + "id=" + id + ", scan=" + scan + ", radiologi=" + radiologi + ", kuantitas=" + kuantitas + '}';
+        return "Scanradiologi{" + "id=" + id + ", scan=" + scan + ", radiologi=" + radiologi + '}';
     }
 
     public String getId() {
@@ -53,14 +51,4 @@ public class Scanradiologi {
     public void setRadiologi(Radiologi radiologi) {
         this.radiologi = radiologi;
     }
-
-    public int getKuantitas() {
-        return kuantitas;
-    }
-
-    public void setKuantitas(int kuantitas) {
-        this.kuantitas = kuantitas;
-    }
-    
-    
 }

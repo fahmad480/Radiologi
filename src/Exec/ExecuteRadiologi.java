@@ -99,6 +99,21 @@ public class ExecuteRadiologi {
         return hasil;
     }
     
+    public int updateKeteranganRadiologi(String keterangan, String idRadiologi) {
+        int hasil = 0;
+        String query = "UPDATE radiologi SET keterangan='"+keterangan+"' WHERE id='"+idRadiologi+"'";
+        ConnectionManager conMan = new ConnectionManager();
+        Connection conn = conMan.LogOn();
+        try {
+            Statement stm = conn.createStatement();
+            hasil = stm.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ExecuteRadiologi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        conMan.LogOff();
+        return hasil;
+    }
+    
     public Radiologi getRow(String id) {
         Radiologi radiologi = new Radiologi();
         String query = "SELECT * FROM radiologi WHERE id='"+id+"'";

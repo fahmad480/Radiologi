@@ -359,12 +359,18 @@
         <Property name="text" type="java.lang.String" value="Simpan"/>
         <Property name="name" type="java.lang.String" value="BtnSimpan" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSimpanMainActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnTutupMain">
       <Properties>
         <Property name="text" type="java.lang.String" value="Reset"/>
         <Property name="name" type="java.lang.String" value="BtnTutup" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTutupMainActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel11">
       <Properties>

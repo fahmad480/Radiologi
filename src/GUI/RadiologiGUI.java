@@ -337,9 +337,19 @@ public class RadiologiGUI extends javax.swing.JFrame {
 
         btnSimpanMain.setText("Simpan");
         btnSimpanMain.setName("BtnSimpan"); // NOI18N
+        btnSimpanMain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanMainActionPerformed(evt);
+            }
+        });
 
         btnTutupMain.setText("Reset");
         btnTutupMain.setName("BtnTutup"); // NOI18N
+        btnTutupMain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTutupMainActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("Catatan Dokter");
 
@@ -749,6 +759,37 @@ public class RadiologiGUI extends javax.swing.JFrame {
         edtKodeFilm.setSelectedItem(id_inv);
         edtQtyFilm.setText(qty);
     }//GEN-LAST:event_tableFilmMainMouseClicked
+
+    private void btnTutupMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTutupMainActionPerformed
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog (null, "Apakah kamu yakin ingin reset data radiologi ini?","Reset Radiologi", dialogButton);
+            if(dialogResult == JOptionPane.YES_OPTION) {
+                Exec.ExecuteRadiologi eRad = new Exec.ExecuteRadiologi();
+                int delete = eRad.deleteRadiologi(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+                if(delete == 1) {
+                    JOptionPane.showMessageDialog(this, "Reset radiologi berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+                    setDataFilm(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+                    setDataPemeriksaan(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+                    hitungHargaDanLembar(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+                    edtNoBuktiMain.removeItem(String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+                    getRadiologiListToComboBox();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Reset radiologi gagal", "Gagal", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+    }//GEN-LAST:event_btnTutupMainActionPerformed
+
+    private void btnSimpanMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanMainActionPerformed
+        String keterangan = edtCatatanMain.getText();
+        
+        Exec.ExecuteRadiologi eRad = new Exec.ExecuteRadiologi();
+        int update = eRad.updateKeteranganRadiologi(keterangan, String.valueOf(edtNoBuktiMain.getModel().getSelectedItem()));
+        if(update == 1) {
+            JOptionPane.showMessageDialog(this, "Radiologi berhasil diupdate/disimpan", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Radiologi gagal diupdate/disimpan", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSimpanMainActionPerformed
 
     /**
      * @param args the command line arguments

@@ -440,7 +440,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel14">
               <Properties>
-                <Property name="text" type="java.lang.String" value="ID Inventory"/>
+                <Property name="text" type="java.lang.String" value="Nama Barang"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

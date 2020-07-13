@@ -11,13 +11,11 @@ package Entity;
  */
 public class Recordlog {
     private String id;
-    private String keterangan;
     private Staff staff;
     private String date;
 
-    public Recordlog(String id, String keterangan, Staff staff, String date) {
+    public Recordlog(String id, Staff staff, String date) {
         this.id = id;
-        this.keterangan = keterangan;
         this.staff = staff;
         this.date = date;
     }
@@ -27,7 +25,7 @@ public class Recordlog {
 
     @Override
     public String toString() {
-        return "Recordlog{" + "id=" + id + ", keterangan=" + keterangan + ", staff=" + staff + ", date=" + date + '}';
+        return "Recordlog{" + "id=" + id + ", staff=" + staff + ", date=" + date + '}';
     }
 
     public String getId() {
@@ -36,14 +34,6 @@ public class Recordlog {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getKeterangan() {
-        return keterangan;
-    }
-
-    public void setKeterangan(String keterangan) {
-        this.keterangan = keterangan;
     }
 
     public Staff getStaff() {

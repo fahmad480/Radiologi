@@ -348,7 +348,7 @@ public class InventoryGUI extends javax.swing.JFrame {
         pnlStockPending.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
         pnlStockPending.add(edtIdInventoryPending, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 430, -1));
 
-        jLabel14.setText("ID Inventory");
+        jLabel14.setText("Nama Barang");
         pnlStockPending.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
 
         jLabel15.setText("Status");

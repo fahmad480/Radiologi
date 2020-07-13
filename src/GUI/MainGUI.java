@@ -263,7 +263,7 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFormMaintenanceActionPerformed
 
     private void btnFormReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormReportActionPerformed
-        new ReportGUI().setVisible(true);
+        new ReportGUI(lblUsername.getText()).setVisible(true);
     }//GEN-LAST:event_btnFormReportActionPerformed
 
     private void btnFormInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormInventoryActionPerformed

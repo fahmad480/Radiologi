@@ -28,6 +28,15 @@ public class ReportGUI extends javax.swing.JFrame {
         setDataRadiologi();
     }
     
+    public ReportGUI(String staff) {
+        initComponents();
+        setDataRecord();
+        setDataRadiologi();
+        
+        lblStaff.setText(staff);
+        lblStaff.setVisible(false);
+    }
+    
     private void setDataRecord() {
         ConvertRecordLogToObject cmto = new ConvertRecordLogToObject();
         String[][] dataRecord = cmto.getRecord();
@@ -36,22 +45,7 @@ public class ReportGUI extends javax.swing.JFrame {
             new String [] {
                 "id", "Tanggal Cetak", "Oleh"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
     }
     
     private void setDataRadiologi() {
@@ -81,6 +75,7 @@ public class ReportGUI extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblRadiologi = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
+        lblStaff = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,18 +146,18 @@ public class ReportGUI extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("Riwayat cetak record");
 
+        lblStaff.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
+                .addComponent(lblStaff)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addGap(281, 281, 281))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel7)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -174,14 +169,21 @@ public class ReportGUI extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(13, 13, 13)
-                .addComponent(jLabel6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(lblStaff))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -197,11 +199,19 @@ public class ReportGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPrintReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintReportActionPerformed
-        try {
-            tblRadiologi.print(JTable.PrintMode.FIT_WIDTH,new MessageFormat("Report Radiologi"),null);
-        }catch (PrinterException ex){
-            Logger.getLogger(ReportGUI.class.getName()).log(Level.SEVERE, null,ex);
-        }   
+        
+        
+        Exec.ExecuteRecordLog eRep = new Exec.ExecuteRecordLog();
+        int result = eRep.insertRecord(lblStaff.getText());
+        if(result == 1) {
+            setDataRecord();
+            setDataRadiologi();
+            try {
+                tblRadiologi.print(JTable.PrintMode.FIT_WIDTH,new MessageFormat("Report Radiologi"),null);
+            }catch (PrinterException ex){
+                Logger.getLogger(ReportGUI.class.getName()).log(Level.SEVERE, null,ex);
+            }
+        }
     }//GEN-LAST:event_btnPrintReportActionPerformed
 
     /**
@@ -246,6 +256,7 @@ public class ReportGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblStaff;
     private javax.swing.JTable tabelReport;
     private javax.swing.JTable tblRadiologi;
     // End of variables declaration//GEN-END:variables

@@ -330,7 +330,7 @@ public class MTGUI extends javax.swing.JFrame {
 //        Exec.ExportToExcel export = new Exec.ExportToExcel();
  //       File file = new File("maintenancereport.xlsx");
   //      export.toExcel(tabelMaintenance, file);
-         try {
+        try {
             tabelMaintenance.print(JTable.PrintMode.FIT_WIDTH,new MessageFormat("Record Maintenance"),null);
         }catch (PrinterException ex){
             Logger.getLogger(MTGUI.class.getName()).log(Level.SEVERE, null,ex);

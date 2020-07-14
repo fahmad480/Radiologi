@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 11, 2020 at 05:37 PM
+-- Generation Time: Jul 13, 2020 at 12:58 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -64,9 +64,9 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `nama`, `jenis`, `kuantitas`, `harga`, `id_supplier`) VALUES
-('film01', 'Film 30x50', 'barang', 50, 0, 'supplier01'),
-('film02', 'Film 40x70', 'barang', 25, 0, 'supplier01'),
-('tools01', 'Alat Scan Radiologi Utama', 'alat', 1, 0, 'supplier02');
+('film01', 'Film 30x50', 'barang', 50, 50000, 'supplier01'),
+('film02', 'Film 40x70', 'barang', 25, 25000, 'supplier01'),
+('tools01', 'Alat Scan Radiologi Utama', 'alat', 1, 10000000, 'supplier02');
 
 -- --------------------------------------------------------
 
@@ -80,6 +80,16 @@ CREATE TABLE `inventoryradiologi` (
   `id_radiologi` int(11) NOT NULL,
   `kuantitas` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `inventoryradiologi`
+--
+
+INSERT INTO `inventoryradiologi` (`id`, `id_inventory`, `id_radiologi`, `kuantitas`) VALUES
+(1, 'film01', 1, 1),
+(5, 'film02', 1, 2),
+(13, 'film02', 9, 1),
+(14, 'film01', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -105,7 +115,8 @@ INSERT INTO `inventory_log` (`id`, `id_staff`, `nama_inv`, `id_supplier`, `keter
 (2, 'st', 'film 40x50', 'su', 'ini film ya bro', 'pending'),
 (4, 'st', 'asdasd', 'supplier01', 'ini film ya bro', 'diterima'),
 (5, 'st', 'film 50x50', 'su', 'film 50x50\nharga 50000/pcs\nkuantitas 100\nkualitas brand udin', 'pending'),
-(7, 'st', 'film 60x50', 'supplier02', 'film 50x50\nharga 50000/pcs\nkuantitas 100\nkualitas brand udin', 'diterima');
+(7, 'st', 'film 60x50', 'supplier02', 'film 50x50\nharga 50000/pcs\nkuantitas 100\nkualitas brand udin', 'diterima'),
+(10, 'st', 'qweqweqwe', 'su', 'film 50x50\nharga 50000/pcs\nkuantitas 100\nkualitas brand udin', 'diterima');
 
 -- --------------------------------------------------------
 
@@ -125,7 +136,8 @@ CREATE TABLE `maintenance_log` (
 --
 
 INSERT INTO `maintenance_log` (`id`, `keterangan`, `id_staff`, `date`) VALUES
-(1, 'maintenance makan', 'st', '2020-07-01');
+(1, 'maintenance makan', 'st', '2020-07-01'),
+(3, 'asdasdasdasdasdasd', 'st', '2020-07-13');
 
 -- --------------------------------------------------------
 
@@ -163,11 +175,18 @@ CREATE TABLE `radiologi` (
   `id` int(11) NOT NULL,
   `id_pasien` varchar(16) NOT NULL,
   `id_dokter` varchar(16) NOT NULL,
-  `id_scanradiologi` int(11) NOT NULL,
-  `id_inventoryradiologi` int(11) NOT NULL,
-  `date` date NOT NULL,
+  `date` varchar(10) NOT NULL DEFAULT '0000-00-00',
   `keterangan` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `radiologi`
+--
+
+INSERT INTO `radiologi` (`id`, `id_pasien`, `id_dokter`, `date`, `keterangan`) VALUES
+(1, '4444444444444441', 'd', '2020-07-11', '123'),
+(2, '4444444444444443', 'd', '2020-07-12', 'asdasdasd'),
+(9, '4444444444444441', 'd', '2020-07-13', 'Terdeteksi otaknya sebesar otaku cacing');
 
 -- --------------------------------------------------------
 
@@ -177,10 +196,19 @@ CREATE TABLE `radiologi` (
 
 CREATE TABLE `record_log` (
   `id` int(11) NOT NULL,
-  `keterangan` text NOT NULL,
   `id_staff` varchar(11) NOT NULL,
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `record_log`
+--
+
+INSERT INTO `record_log` (`id`, `id_staff`, `date`) VALUES
+(1, 'st', '2020-07-11'),
+(2, 'st', '2020-07-10'),
+(3, 'st', '2020-07-13'),
+(4, 'st', '2020-07-13');
 
 -- --------------------------------------------------------
 
@@ -211,9 +239,18 @@ INSERT INTO `scan` (`id`, `nama`, `harga`) VALUES
 CREATE TABLE `scanradiologi` (
   `id` int(11) NOT NULL,
   `id_scan` varchar(11) NOT NULL,
-  `id_radiologi` int(11) NOT NULL,
-  `kuantitas` int(11) NOT NULL
+  `id_radiologi` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `scanradiologi`
+--
+
+INSERT INTO `scanradiologi` (`id`, `id_scan`, `id_radiologi`) VALUES
+(1, 'full', 1),
+(3, 'kepala01', 1),
+(16, 'full', 9),
+(17, 'full', 2);
 
 -- --------------------------------------------------------
 
@@ -315,7 +352,7 @@ ALTER TABLE `inventoryradiologi`
 ALTER TABLE `inventory_log`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_staff` (`id_staff`),
-  ADD KEY `id_supplier` (`id_supplier`);
+  ADD KEY `inventory_log_ibfk_3` (`id_supplier`);
 
 --
 -- Indexes for table `maintenance_log`
@@ -337,9 +374,7 @@ ALTER TABLE `pasien`
 ALTER TABLE `radiologi`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_dokter` (`id_dokter`),
-  ADD KEY `id_pasien` (`id_pasien`),
-  ADD KEY `id_inventoryradiologi` (`id_inventoryradiologi`),
-  ADD KEY `id_scanradiologi` (`id_scanradiologi`);
+  ADD KEY `id_pasien` (`id_pasien`);
 
 --
 -- Indexes for table `record_log`
@@ -388,37 +423,37 @@ ALTER TABLE `suster`
 -- AUTO_INCREMENT for table `inventoryradiologi`
 --
 ALTER TABLE `inventoryradiologi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `inventory_log`
 --
 ALTER TABLE `inventory_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `maintenance_log`
 --
 ALTER TABLE `maintenance_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `radiologi`
 --
 ALTER TABLE `radiologi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `record_log`
 --
 ALTER TABLE `record_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `scanradiologi`
 --
 ALTER TABLE `scanradiologi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables
@@ -428,55 +463,53 @@ ALTER TABLE `scanradiologi`
 -- Constraints for table `inventory`
 --
 ALTER TABLE `inventory`
-  ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`ktp`);
+  ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`ktp`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `inventoryradiologi`
 --
 ALTER TABLE `inventoryradiologi`
-  ADD CONSTRAINT `inventoryradiologi_ibfk_1` FOREIGN KEY (`id_inventory`) REFERENCES `inventory` (`id`),
-  ADD CONSTRAINT `inventoryradiologi_ibfk_2` FOREIGN KEY (`id_radiologi`) REFERENCES `radiologi` (`id`);
+  ADD CONSTRAINT `inventoryradiologi_ibfk_1` FOREIGN KEY (`id_inventory`) REFERENCES `inventory` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `inventoryradiologi_ibfk_2` FOREIGN KEY (`id_radiologi`) REFERENCES `radiologi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `inventory_log`
 --
 ALTER TABLE `inventory_log`
-  ADD CONSTRAINT `inventory_log_ibfk_2` FOREIGN KEY (`id_staff`) REFERENCES `staff` (`ktp`),
-  ADD CONSTRAINT `inventory_log_ibfk_3` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`ktp`);
+  ADD CONSTRAINT `inventory_log_ibfk_2` FOREIGN KEY (`id_staff`) REFERENCES `staff` (`ktp`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `inventory_log_ibfk_3` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`ktp`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `maintenance_log`
 --
 ALTER TABLE `maintenance_log`
-  ADD CONSTRAINT `maintenance_log_ibfk_1` FOREIGN KEY (`id_staff`) REFERENCES `staff` (`ktp`);
+  ADD CONSTRAINT `maintenance_log_ibfk_1` FOREIGN KEY (`id_staff`) REFERENCES `staff` (`ktp`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pasien`
 --
 ALTER TABLE `pasien`
-  ADD CONSTRAINT `pasien_ibfk_1` FOREIGN KEY (`id_suster`) REFERENCES `suster` (`ktp`);
+  ADD CONSTRAINT `pasien_ibfk_1` FOREIGN KEY (`id_suster`) REFERENCES `suster` (`ktp`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `radiologi`
 --
 ALTER TABLE `radiologi`
-  ADD CONSTRAINT `radiologi_ibfk_1` FOREIGN KEY (`id_dokter`) REFERENCES `dokter` (`ktp`),
-  ADD CONSTRAINT `radiologi_ibfk_2` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`ktp`),
-  ADD CONSTRAINT `radiologi_ibfk_3` FOREIGN KEY (`id_inventoryradiologi`) REFERENCES `inventoryradiologi` (`id`),
-  ADD CONSTRAINT `radiologi_ibfk_4` FOREIGN KEY (`id_scanradiologi`) REFERENCES `scanradiologi` (`id`);
+  ADD CONSTRAINT `radiologi_ibfk_1` FOREIGN KEY (`id_dokter`) REFERENCES `dokter` (`ktp`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `radiologi_ibfk_2` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`ktp`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `record_log`
 --
 ALTER TABLE `record_log`
-  ADD CONSTRAINT `record_log_ibfk_1` FOREIGN KEY (`id_staff`) REFERENCES `staff` (`ktp`);
+  ADD CONSTRAINT `record_log_ibfk_1` FOREIGN KEY (`id_staff`) REFERENCES `staff` (`ktp`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `scanradiologi`
 --
 ALTER TABLE `scanradiologi`
-  ADD CONSTRAINT `scanradiologi_ibfk_1` FOREIGN KEY (`id_radiologi`) REFERENCES `radiologi` (`id`),
-  ADD CONSTRAINT `scanradiologi_ibfk_2` FOREIGN KEY (`id_scan`) REFERENCES `scan` (`id`);
+  ADD CONSTRAINT `scanradiologi_ibfk_1` FOREIGN KEY (`id_radiologi`) REFERENCES `radiologi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `scanradiologi_ibfk_2` FOREIGN KEY (`id_scan`) REFERENCES `scan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
